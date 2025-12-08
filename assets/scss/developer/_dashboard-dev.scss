@@ -1,0 +1,25 @@
+// Test Pages Here
+@import 'test-pages/_test-login.scss';
+
+// Import Test Components Here
+// @import 'test-components/_main-menu-bar.scss';
+
+
+// Dashboard Developer
+body.dashboard-dev {
+    // Mobile background (default)
+    background-image: url('../img/bg-mobile.png'); 
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+     
+    // Desktop background
+    @media (width >= $md) {
+        background-image: url('../img/bg-desktop.png'); 
+        background-position: top;
+        background-repeat: no-repeat;
+        background-size: cover; 
+    }
+
+}

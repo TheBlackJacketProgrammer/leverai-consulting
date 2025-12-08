@@ -1,0 +1,72 @@
+body.home {
+    // background-color: #020610; // Deep dark blue/black
+    background: linear-gradient(to bottom, #000000 0%, #091e25 50%, #000000 100%);
+    background-attachment: fixed; // Gradient does not scroll
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden; // Prevent horizontal scroll from glow effects
+    height: auto !important; // Allow body to grow with content
+    min-height: 100%; // Ensure it covers at least the viewport
+    position: relative; // For pseudo-element positioning
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        
+        background-image: url('../img/bg-landing-page.png'); 
+        background-position: top center;
+        background-repeat: no-repeat;
+        background-size: 100% auto;
+        
+        // Apply filters for more contrast and saturation
+        filter: contrast(1.1) saturate(1.8) brightness(1.4);
+        
+        pointer-events: none; // Let clicks pass through
+        z-index: -1; // Behind content
+        
+        @media (min-width: 768px) {
+            background-image: url('../img/bg-landing-page.png'); 
+            background-size: 100% auto; // Maintain aspect ratio, cover width
+            background-position: center -20px;
+        }
+    }
+}
+
+// Custom Glassmorphism Panel
+.glass-panel {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+// Custom Button Style
+.btn-cyan {
+    background-color: #00C2FF;
+    color: #000000;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: #33D1FF;
+        transform: translateY(-2px);
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// Text Gradient
+.text-gradient-cyan {
+    background: linear-gradient(to right, #ffffff 0%, #00C2FF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+// Smooth scroll behavior
+html {
+    scroll-behavior: smooth;
+}

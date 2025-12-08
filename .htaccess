@@ -1,0 +1,13 @@
+RewriteEngine on
+RewriteCond $1 !^(index\.php|assets|images|js|css|uploads|public|favicon.png)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ ./index.php/$1 [L]
+
+# Allow direct access to image files with special characters in filenames
+<FilesMatch "\.(jpg|jpeg|png|gif|bmp|ico)$">
+  Header set Content-Disposition "attachment"
+  Require all granted
+</FilesMatch>
+
+# Remove cPanel-specific PHP handler; handled by Apache/PHP-FPM in container

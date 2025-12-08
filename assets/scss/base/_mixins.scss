@@ -1,0 +1,285 @@
+// Typography Mixins
+
+// Heading Mixins
+@mixin h1 {
+  font-size: clamp(32px, 5vw, 40px);
+}
+@mixin h2 {
+  font-size: clamp(28px, 4vw, 32px);
+}
+@mixin h3 {
+  font-size: 30px;
+}
+@mixin h4 {
+  font-size: 24px;
+}
+@mixin h5 {
+  font-size: 18px;
+}
+@mixin h6 {
+  font-size: 18px;
+}
+
+// Paragraph Mixins
+@mixin p {
+  font-size: 16px;
+  font-family: $font-roboto;
+  font-weight: 600;  // not quite 500, but Proxima Nova Medium(500) is actually not available;
+  line-height: 1.5;
+  margin-bottom: 1em;
+  color: $text-6;
+}
+
+// Link Mixins
+@mixin a {
+  font-family: $font-roboto;
+  color: $link-primary;
+  &:hover,
+  &:focus,
+  &:active {
+    color: $link-primary;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+}
+
+// List Mixins
+@mixin ul {
+  font-family: $font-roboto;
+  color: $text-6;
+}
+
+// Typography Mixin
+@mixin typography {
+  body {
+    // Typography Resets
+    font-family: $font-roboto;
+    --e-global-typography-text-font-family: #{$font-roboto};
+    
+    // Website Typography
+    h1,h2,h3,h4,h5,h6 {
+      font-family: $font-roboto;
+      font-weight: 700;
+      line-height: 1.2;
+      margin:0;
+      color: $white;
+      opacity: 0.8;
+    }
+    
+    h1 {
+      @include h1;
+    }
+    h2 {
+      @include h2;
+    }
+    h3 {
+      @include h3;
+    }
+    h4 {
+      @include h4;
+    }
+    h5 {
+      @include h5;
+    }
+    h6 {
+      @include h6;
+    }
+    p {
+      @include p;
+      margin: 0;
+    }
+    a {
+      @include a;
+      margin: 0;
+    }
+    ul {
+      @include ul;
+      margin: 0;
+    }
+  }
+}
+
+// Tag Mixins
+@mixin tag-small {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin: 0;
+}
+
+@mixin tag-medium {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin: 0;
+}
+
+@mixin tag-large {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin: 0;
+  // white-space: nowrap;
+}
+
+// Button Mixins
+@mixin btn-standard {
+  // Layout & sizing
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 12px 24px;
+  width: auto;
+  
+  // Typography
+  font-family: $font-roboto;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+  white-space: nowrap;
+  
+  // Visual styling
+  background-color: $shade-6;
+  border: 2px solid $border-color;
+  border-radius: $border-radius-md !important;
+  color: $text-1;
+  outline: 0;
+  box-shadow: none;
+  transition: none;
+  
+  // Interactive states
+  &:hover,
+  &:focus,
+  &:active {
+    background: $shade-2;
+    border-color: $black;
+    color: $text-1;
+    text-decoration: none;
+    box-shadow: none;
+    outline: 0;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $black;
+    outline-offset: 2px;
+  }
+}
+
+// Button Primary Mixin
+@mixin btn-primary {
+  @include btn-standard;
+  color: $white;
+  background: $primary !important;
+  border-color: $primary;
+}
+
+// Button Secondary Mixin
+@mixin btn-secondary {
+  @include btn-standard;
+  
+  // Override standard button styles
+  background: $shade-8 !important;
+  color: $black;
+  border-color: $shade-8;
+
+  // Interactive states
+  &:hover,
+  &:focus,
+  &:active {
+    background: $primary-1 !important;
+    color: $text-3 !important;
+  }
+
+  &:focus-visible {
+    background: $primary-1 !important;
+    outline: 2px solid $primary;
+    outline-offset: 2px;
+  }
+}
+
+
+@mixin btn-transparent-bg {
+  @include btn-secondary;
+  
+  // Override secondary button styles
+  background-color: transparent !important;
+  color: $white;
+  border: unset !important;
+
+  // Interactive states
+  &:hover,
+  &:focus,
+  &:active {
+    background: rgba($white, 0.11);
+    color: $white;
+    border-color: $primary;
+  }
+
+  &:focus-visible {
+    background: rgba($primary, 0.11);
+    outline: 2px solid $white;
+    outline-offset: 2px;
+  }
+}
+
+// Button Tertiary Mixin
+@mixin btn-tertiary {
+  @include btn-secondary;
+  
+  // Override secondary button styles
+  background: $white;
+  color: $text-1;
+  border-color: $border-color;
+
+  // Interactive states
+  &:hover,
+  &:focus,
+  &:active {
+    background: $text-8;
+    color: $text-1;
+    border-color: $shade-4;
+  }
+
+  &:focus-visible {
+    background: $primary-1;
+    outline: 2px solid $primary;
+    outline-offset: 2px;
+  }
+}
+
+// Ellipses 2 Lines Mixin
+@mixin ellipses-2-lines {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;  // number of lines to show
+  text-overflow: ellipsis;
+}
+
+// Ellipses 3 Lines Mixin
+@mixin ellipses-3-lines {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;  // number of lines to show
+  text-overflow: ellipsis;
+}
+
+// Divider Mixin
+@mixin divider {
+  border-bottom: 2px solid $border-color;
+  width: 100%;
+  height: 1px;
+  opacity: 0.8;
+}
+

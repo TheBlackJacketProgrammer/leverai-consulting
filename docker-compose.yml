@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: leverai-development
+    restart: unless-stopped
+    environment: {}
+    volumes:
+      - ./:/var/www/html
+      - /var/www/html/assets/dist  # Anonymous volume to exclude dist from host mount
+      - /var/www/html/node_modules  # Anonymous volume to exclude node_modules from host mount
+    ports:
+      - "35677:80"

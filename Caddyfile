@@ -1,0 +1,54 @@
+# Replace with your real domain and email for TLS
+leverai.development {
+    encode zstd gzip
+
+    # Optional: redirect www to bare domain
+    @www host www.leverai.development
+    redir @www https://leverai.development{uri}
+
+    # Add CORS headers for API endpoints
+    header {
+        Access-Control-Allow-Origin "*"
+        Access-Control-Allow-Methods "GET, POST, OPTIONS"
+        Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+        Access-Control-Max-Age "86400"
+    }
+
+    # Reverse proxy to the Docker app published on host port
+    reverse_proxy localhost:35677
+}
+
+# Production configuration for leverai.dev
+leverai.dev {
+    encode zstd gzip
+
+    # Optional: redirect www to bare domain
+    @www host www.leverai.dev
+    redir @www https://leverai.dev{uri}
+
+    # Add CORS headers for API endpoints
+    header {
+        Access-Control-Allow-Origin "*"
+        Access-Control-Allow-Methods "GET, POST, OPTIONS"
+        Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+        Access-Control-Max-Age "86400"
+    }
+
+    # Reverse proxy to the Docker app published on host port
+    reverse_proxy localhost:35677
+}
+
+www.leverai.dev {
+    encode zstd gzip
+
+    # Add CORS headers for API endpoints
+    header {
+        Access-Control-Allow-Origin "*"
+        Access-Control-Allow-Methods "GET, POST, OPTIONS"
+        Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+        Access-Control-Max-Age "86400"
+    }
+
+    # Reverse proxy to the Docker app published on host port
+    reverse_proxy localhost:35677
+}

@@ -1,0 +1,162 @@
+main.dashboard {
+
+    .btn-secondary, .btn-primary {
+        @media (width <= $md) {
+            padding: 4px 8px !important;
+            height: auto !important;
+        }
+    }
+    
+    .section-customer {
+        width: 100%;
+        align-items: center;
+
+        @media (width < $md) {
+           padding-top: 10px;
+        }
+    }
+
+    .section-requests {
+        width: 100%;
+        @media (width < $md) {
+            padding: 10px $side-padding-mobile;
+        }
+
+        .search-box {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border-radius: $border-radius-sm;
+            border: 1px solid $border-color;
+            padding: 4px;
+            gap: 8px;
+
+            svg {
+                width: 24px;
+                height: 24px;
+                fill: white;
+            }
+
+            input[type="text"] {
+                // width: 300px;
+                flex: 1;
+                padding: 4px;
+                background-color: $black;
+                color: white;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            
+            @media (width <= $md) {
+                width: 100%;
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+
+            @media (width <= $md) {
+                display: none;
+            }
+
+            thead {
+                border-bottom: 1px solid $border-color;
+
+                tr{
+                    th{
+                        padding-bottom: 16px;
+                    }
+                }
+            }
+
+            tbody {
+                tr{
+                    td{
+                        padding: 16px 0 !important;
+                    }
+                }
+            }
+
+            .btn-secondary{
+                padding: 8px 16px;
+                height: auto;
+            }
+        }
+
+        .list-tickets {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+
+            @media (width > $md) {
+                display: none;
+            }
+
+            .ticket-item {
+                display: grid;
+                grid-template-rows: repeat(4, minmax(0, 1fr));
+                width: 100%;
+                border-bottom: 1px solid $border-color;
+                padding: 8px 0;
+            }
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 24px;
+            gap: 8px;
+
+            button {
+                @include btn-secondary;
+                cursor: pointer;
+
+                &:disabled {
+                    background: $shade-5 !important;
+                    color: $text-3 !important;
+                    cursor: not-allowed;
+
+                    &:hover {
+                        background: $shade-5 !important;
+                        color: $text-3 !important;
+                        cursor: not-allowed;
+                    }
+                }
+
+                &.active {
+                    background: $primary-6 !important;
+                    color: $white !important;
+                }
+            }
+        }
+    }
+
+    .black-container {
+        width: 100%;
+        background-color: $black;
+        border-radius: $border-radius-md;
+        padding: 16px;
+        display: flex;
+        gap: 8px;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+    }
+
+    // Ticket Status Colors
+    .status-pending {
+        color: $color-warning !important;
+    }
+
+    .status-reject {
+        color: $color-error !important;
+    }
+
+    .status-implement {
+        color: $color-success !important;
+    }
+}

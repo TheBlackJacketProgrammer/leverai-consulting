@@ -1,0 +1,225 @@
+main.dashboard-admin {
+    .admin-module-container {
+        width: 100%;
+    }
+
+    /* Admin Modules */
+    .admin-module-requests, .admin-module-customers, .admin-module-billing, .admin-module-dashboard {
+        width: 100%;
+        .btn-secondary, .btn-primary {
+            @media (width <= $md) {
+                padding: 4px 8px !important;
+                height: auto !important;
+            }
+        }
+
+        .section-requests {
+            width: 100%;
+            @media (width < $md) {
+                // padding: 10px $side-padding-mobile;
+                padding: 10px 0px;
+            }
+
+            .search-box {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                border-radius: $border-radius-sm;
+                border: 1px solid $border-color;
+                padding: 4px;
+                gap: 8px;
+
+                svg {
+                    width: 24px;
+                    height: 24px;
+                    fill: white;
+                }
+
+                input[type="text"] {
+                    // width: 300px;
+                    flex: 1;
+                    padding: 4px;
+                    background-color: $black;
+                    color: white;
+
+                    &:focus {
+                        outline: none;
+                    }
+                }
+
+                
+                @media (width <= $md) {
+                    width: 100%;
+                }
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+
+                @media (width <= $md) {
+                    display: none;
+                }
+
+                thead {
+                    border-bottom: 1px solid $border-color;
+
+                    tr{
+                        th{
+                            padding-bottom: 16px;
+                        }
+                    }
+                }
+
+                tbody {
+                    tr{
+                        td{
+                            padding: 16px 0 !important;
+                        }
+                    }
+                }
+
+                .btn-secondary{
+                    padding: 8px 16px;
+                    height: auto;
+                }
+            }
+
+            .list-tickets {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+
+                @media (width > $md) {
+                    display: none;
+                }
+
+                .ticket-item {
+                    display: grid;
+                    grid-template-rows: repeat(4, minmax(0, 1fr));
+                    width: 100%;
+                    border-bottom: 1px solid $border-color;
+                    padding: 8px 0;
+                }
+            }
+
+            .pagination {
+                display: flex;
+                justify-content: center;
+                margin-top: 24px;
+                gap: 8px;
+                flex-wrap: wrap;
+                width: 100%;
+                padding: 0 8px;
+
+                @media (width <= $md) {
+                    gap: 4px;
+                    padding: 0 4px;
+                    margin-top: 16px;
+                }
+
+                button {
+                    @include btn-secondary;
+                    cursor: pointer;
+                    min-width: 32px;
+                    height: 32px;
+                    padding: 4px 8px;
+                    font-size: 14px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    @media (width <= $md) {
+                        min-width: 28px;
+                        height: 28px;
+                        padding: 2px 6px;
+                        font-size: 12px;
+                    }
+
+                    &:disabled {
+                        background: $shade-5 !important;
+                        color: $text-3 !important;
+                        cursor: not-allowed;
+
+                        &:hover {
+                            background: $shade-5 !important;
+                            color: $text-3 !important;
+                            cursor: not-allowed;
+                        }
+                    }
+
+                    &.active {
+                        background: $primary-6 !important;
+                        color: $white !important;
+                    }
+                }
+
+                .pagination-ellipsis {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 32px;
+                    height: 32px;
+                    padding: 4px 8px;
+                    font-size: 14px;
+                    color: $text-2;
+                    user-select: none;
+
+                    @media (width <= $md) {
+                        min-width: 28px;
+                        height: 28px;
+                        padding: 2px 6px;
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+
+        .black-container {
+            width: 100%;
+            background-color: $black;
+            border-radius: $border-radius-md;
+            padding: 16px;
+            display: flex;
+            gap: 8px;
+            flex-direction: column;
+            align-items: start;
+            justify-content: center;
+        }
+
+        .dashboard-card {
+            width: 100%;
+            height: 100%;
+            background-color: $black;
+            border-radius: $border-radius-md;
+            padding: 16px;
+            display: flex;
+            gap: 8px;
+            flex-direction: column;
+            align-items: start;
+            justify-content: start;
+        }
+
+        // Ticket Status Colors
+        .status-pending {
+            color: $color-warning !important;
+        }
+
+        .status-reject {
+            color: $color-error !important;
+        }
+
+        .status-implement {
+            color: $color-success !important;
+        }
+
+        .status-success {
+            color: $color-success !important;
+        }
+
+        .top-up {
+            color: $color-warning !important;
+        }
+    }    
+}
+

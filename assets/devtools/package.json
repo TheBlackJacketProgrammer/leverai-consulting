@@ -1,0 +1,25 @@
+{
+  "name": "devtools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sass:watch": "sass --watch ../scss/main.scss:../css/main.css --style compressed --source-map",
+    "sass:build": "sass ../scss/main.scss:../css/main.css --style compressed --source-map",
+    "tailwind:watch": "tailwindcss -i ./src/tailwind.css -o ../css/tailwind.css --watch",
+    "tailwind:build": "tailwindcss -i ./src/tailwind.css -o ../css/tailwind.css --minify",
+    "build": "npm run sass:build && npm run tailwind:build",
+    "watch": "concurrently \"npm run sass:watch\" \"npm run tailwind:watch\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^8.2.2",
+    "postcss": "^8.5.3",
+    "sass": "^1.87.0",
+    "tailwindcss": "^4.1.7"
+  }
+}

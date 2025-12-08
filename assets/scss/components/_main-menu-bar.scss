@@ -1,0 +1,30 @@
+.main-menu-bar {
+  background-color: #222222;
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 $side-padding-mobile;
+
+  .main-menu-bar-container {
+    max-width: $max-width-container;
+    width: 100%;
+    margin: 0 auto;
+    padding: 8px 0;
+    display: flex;
+    flex-direction: row;
+    gap:8px;
+
+    .menu-item {
+      padding: 2px 8px;
+      &:hover {
+        color: $primary-6;
+        font-weight: 700;
+        transition: all 0.3s ease;
+      }
+    }
+  }
+}

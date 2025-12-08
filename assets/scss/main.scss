@@ -1,0 +1,30 @@
+// Base
+@import 'base/_variables.scss';
+@import 'base/_mixins.scss';
+@import 'base/_general.scss';
+@import 'base/_layouts.scss';
+@import 'base/_fonts.scss';
+
+// Apply typography globally
+@include typography; // from the base/_mixins.scss file
+
+// Components
+@import 'components/_header.scss';
+@import 'components/_footer.scss';
+@import 'components/_modal.scss';
+@import 'components/_top-up.scss';
+@import 'components/_main-menu-bar.scss';
+
+// Pages
+@import 'pages/_home.scss';
+@import 'pages/_login.scss';
+@import 'pages/_test-page.scss';
+@import 'pages/_subscribe.scss';
+@import 'pages/_payment-status.scss';
+@import 'pages/_dashboard.scss';
+@import 'pages/_admin-modules.scss';
+
+// Developer
+@import 'developer/_dashboard-dev.scss';
+
+

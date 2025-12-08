@@ -1,0 +1,122 @@
+main.test-login {
+    // Mobile background (default)
+    background-image: url('../img/bg-mobile.png'); 
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+
+     
+    // Desktop background
+    @media (width >= $md) {
+        background-image: url('../img/bg-desktop.png'); 
+        background-position: top;
+        background-repeat: no-repeat;
+        background-size: cover; 
+    }
+
+    
+    
+    .login-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        border: 1px solid $border-color;
+        border-radius: $border-radius-md;
+        align-items: left;
+        justify-self: center;
+        justify-content: center;
+        padding:30px;
+        background-color: $black;
+        color: $white;
+        width: auto;                       
+        margin: 200px auto;
+
+        @media (width <= $md) {
+            padding: 20px 20px;
+    }
+
+    h2{
+        text-align: left;
+        margin-bottom: 20px;
+        
+    }
+
+    .input-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            
+            &.error {
+                input {
+                    border-color: $color-error;
+                }
+            }
+            
+            .input-icon {
+                position: absolute;
+                left: 15px;
+                top: 15px;
+                z-index: 2;
+                pointer-events: none;
+            }
+            
+            input {
+                width: 100%;
+                padding: 15px 15px 15px 50px;
+                background-color: $black;
+                border: 1px solid $border-color;
+                border-radius: $border-radius-md;
+                color: $white;
+                transition: border-color 0.3s ease;
+            
+                &::placeholder {
+                    color: $white;
+                    opacity: 0.8;
+                }
+            
+                &:focus {
+                    outline: none;
+                    border-color: #555;
+                }
+            
+                &:hover {
+                    border-color: #444;
+                }
+            }
+
+        }
+    }
+
+
+    .submit-area {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .submit-divider {
+            width: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            position: relative;
+           
+            .divider {
+                border-color: $primary;
+            }
+
+            span {
+                color: $white;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                padding: 0 10px;
+                font-size: 18px;
+            }
+        }
+    }
+}

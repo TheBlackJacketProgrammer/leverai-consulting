@@ -1,0 +1,437 @@
+html {
+  overflow-x: hidden;
+}
+
+// Loading
+html.loading {
+  background: $black url('../img/loading.gif') no-repeat;
+  background-size: $loading-spinner-size;
+  background-position: center center;
+  background-attachment: fixed;
+  overflow: hidden; // Prevent scrolling during loading
+  transition: background-color $loading-transition-duration ease;
+  
+  // Ensure loading overlay covers entire viewport
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba($black, $loading-overlay-opacity);
+    z-index: 9998;
+    pointer-events: none;
+  }
+  
+  // Loading spinner container
+  &::after {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: $loading-spinner-size;
+    height: $loading-spinner-size;
+    background: url('../img/loading.gif') no-repeat center center;
+    background-size: contain;
+    z-index: 9999;
+    pointer-events: none;
+    animation: loadingPulse $loading-animation-duration ease-in-out infinite;
+  }
+}
+
+html.loading body {
+  opacity: $loading-body-opacity;
+  filter: alpha(opacity=30); // Updated for better IE support
+  pointer-events: none;
+  transition: opacity $loading-transition-duration ease;
+  user-select: none; // Prevent text selection during loading
+  
+  // Ensure all interactive elements are disabled
+  * {
+    pointer-events: none !important;
+  }
+}
+
+// Loading animation keyframes
+@keyframes loadingPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+// Responsive loading adjustments
+@media (max-width: $md) {
+  html.loading::after {
+    width: $loading-spinner-size-mobile;
+    height: $loading-spinner-size-mobile;
+  }
+}
+
+@media (max-width: $sm) {
+  html.loading::after {
+    width: $loading-spinner-size-small;
+    height: $loading-spinner-size-small;
+  }
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: $black;
+  display: flex;
+  flex-direction: column;
+}
+
+body.bg-extra {
+  // Mobile background (default)
+  background-image: url('../img/bg-mobile.png'); 
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+   
+  // Desktop background
+  @media (width >= $md) {
+      background-image: url('../img/bg-desktop.png'); 
+      background-position: top;
+      background-repeat: no-repeat;
+      background-size: cover; 
+  }
+}
+
+body.bg-dashboard {
+  background-color: $shade-8;
+}
+
+
+// Set Poppins as the default font for all elements
+* {
+  font-family: $font-roboto;
+}
+
+// Heading
+h1 {
+  @include h1;
+}
+h2 {
+  @include h2;
+}
+h3 {
+  @include h3;
+}
+h4 {
+  @include h4;
+}
+h5 {
+  @include h5;
+}
+h6 {
+  @include h6;
+}
+
+// Tags
+.tag-small {
+  @include tag-small;
+}
+.tag-medium {
+  @include tag-medium;
+}
+.tag-large {
+  @include tag-large;
+}
+
+
+// Ensure main content takes up available space
+main {
+  flex: 1;
+}
+
+// Ensure footer stays at bottom
+footer {
+  flex-shrink: 0;
+}
+
+.max-width-inner-page {
+  max-width: $max-width-inner-page;
+}
+
+// SVGs
+svg {
+  display: inline-block;
+}
+
+// Images
+img {
+
+  @media (max-width: $md) {
+    width: 100%;
+    &.icon {
+      width: auto;
+    }
+  }
+
+  &.rounded-sm {
+    border-radius: $border-radius-sm;
+  }
+
+  &.rounded-md {
+    border-radius: $border-radius-md;
+  }
+
+  &.rounded-lg {
+    border-radius: $border-radius-lg;
+  }
+
+}
+  
+// Rounded Borders
+.rounded-sm {
+  border-radius: $border-radius-sm;
+}
+
+.rounded-md {
+  border-radius: $border-radius-md;
+}
+
+.rounded-lg {
+  border-radius: $border-radius-lg;
+}
+  
+// Buttons
+.btn-standard {
+  @include btn-standard;
+}
+
+.btn-primary {
+  @include btn-primary;
+}
+
+.btn-secondary {
+  @include btn-secondary;
+}
+
+.btn-transparent-bg {
+  @include btn-transparent-bg;
+}
+
+.btn-tertiary {
+  @include btn-tertiary;
+}
+
+  
+// Text Colors
+.primary {
+  color: $primary;
+}
+
+.primary-0 {
+  color: $primary-0;
+}
+
+.primary-1 {
+  color: $primary-1;
+}
+
+.primary-2 {
+  color: $primary-2;
+}
+
+.primary-3 {
+  color: $primary-3;
+}
+
+.primary-4 {
+  color: $primary-4;
+}
+
+.primary-5 {
+  color: $primary-5;
+}
+
+.primary-6 {
+  color: $primary-6;
+}
+
+.primary-7 {
+  color: $primary-7;
+}
+
+.primary-8 {
+  color: $primary-8;
+}
+
+.primary-9 {
+  color: $primary-9;
+}
+  
+
+// Text Colors
+.text-1 {
+  color: $text-1;
+}
+
+.text-2 {
+  color: $text-2;
+}
+
+.text-3 {
+  color: $text-3;
+}
+
+.text-4 {
+  color: $text-4;
+}
+
+.text-5 {
+  color: $text-5;
+}
+
+.text-6 {
+  color: $text-6;
+}
+
+.text-7 {
+  color: $text-7;
+}
+
+.text-8 {
+  color: $text-8;
+}
+
+.text-9 {
+  color: $text-9;
+}
+
+.text-10 {
+  color: $text-10;
+}
+
+.text-11 {
+  color: $text-11;
+}
+
+.text-12 {
+  color: $text-12;
+}
+  
+  
+// Background Colors
+.bg-white {
+  background-color: $white;
+}
+
+.bg-primary {
+  background-color: $primary;
+}
+
+.bg-primary-0 {
+  background-color: $primary-0;
+}
+
+.bg-primary-1 {
+  background-color: $primary-1;
+}
+
+.bg-primary-2 {
+  background-color: $primary-2;
+}
+
+.bg-primary-3 {
+  background-color: $primary-3;
+}
+
+.bg-primary-4 {
+  background-color: $primary-4;
+}
+
+.bg-primary-5 {
+  background-color: $primary-5;
+}
+
+.bg-primary-6 {
+  background-color: $primary-6;
+}
+
+.bg-primary-7 {
+  background-color: $primary-7;
+}
+
+.bg-primary-8 {
+  background-color: $primary-8;
+}
+
+.bg-primary-9 {
+  background-color: $primary-9;
+}
+
+
+// Shade colours
+.shade-1 {
+  color: $shade-1;
+}
+
+.shade-2 {
+  color: $shade-2;
+}
+
+.shade-3 {
+  color: $shade-3;
+}
+
+.shade-4 {
+  color: $shade-4;
+}
+
+.shade-5 {
+  color: $shade-5;
+}
+
+.shade-6 {
+  color: $shade-6;
+}
+
+.shade-7 {
+  color: $shade-7;
+}
+
+.shade-8 {
+  color: $shade-8;
+}
+
+.shade-9 {
+  color: $shade-9;
+}
+
+.bg-black {
+  background-color: $black;
+}
+
+// Border colours
+.border-color {
+  border-color: $border-color;
+}
+  
+// Ellipses
+.ellipses-2-lines {
+  @include ellipses-2-lines;
+}
+  
+.ellipses-3-lines {
+  @include ellipses-3-lines;
+}
+  
+// Divider
+.divider {
+  @include divider;
+}
+  
