@@ -6,7 +6,7 @@
     "watch:tailwind": "tailwindcss -i assets/scss/tailwind.scss -o assets/css/tailwind.css --watch --poll",
     "build:js": "cd assets/js && npx gulp bundle-js && npx gulp bundle-js-dev",
     "dev": "concurrently \"npm run watch:scss\" \"npm run watch:tailwind\"",
-    "build": "npm run build:scss && npm run build:tailwind && npm run build:js"
+    "build": "concurrently \"npm run build:scss\" \"npm run build:tailwind\" \"npm run build:js\""
   },
   "devDependencies": {
     "autoprefixer": "^10.4.17",
