@@ -1,0 +1,33 @@
+name: Deploy LeverAI Consulting
+
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: false
+
+
+      - name: Verify Docker availability
+        run: |
+          docker --version
+          docker compose version || docker-compose --version
+
+
+      - name: Make deploy script executable
+        run: chmod +x deploy.sh
+
+
+      - name: Run deployment
+        run: ./deploy.sh
