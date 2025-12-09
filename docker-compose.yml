@@ -3,7 +3,7 @@ version: "3.9"
 services:
   app:
     build: .
-    container_name: leverai-development
+    container_name: leverai-consulting
     restart: unless-stopped
     environment: {}
     volumes:
