@@ -65,8 +65,8 @@ Installation
 1. **Clone the repository**
    ::
 
-      git clone https://github.com/yourusername/ci3_template.git
-      cd ci3_template
+      git clone https://github.com/yourusername/leverai-consulting.git
+      cd leverai-consulting
 
 2. **Install PHP dependencies**
    ::
@@ -112,7 +112,7 @@ For containerized deployment:
 1. **Build the Docker image**
    ::
 
-      docker build -t ci3_template .
+      docker build -t leverai-consulting .
 
 2. **Run with Docker Compose**
    ::
@@ -166,7 +166,7 @@ Project Structure
 
 ::
 
-   ci3_template/
+   leverai-consulting/
    ├── application/
    │   ├── config/          # Configuration files
    │   ├── controllers/     # Application controllers
@@ -308,7 +308,7 @@ For containerized deployment:
 1. **Build production image**
    ::
 
-      docker build -t ci3_template:production .
+      docker build -t leverai-consulting:production .
 
 2. **Deploy with Docker Compose**
    ::
@@ -350,7 +350,7 @@ Common Issues
 ::
 
    # Rebuild image
-   docker build --no-cache -t ci3_template .
+   docker build --no-cache -t leverai-consulting .
    
    # Check container logs
    docker logs <container_name>
@@ -368,7 +368,7 @@ Documentation
 Issues and Contributions
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Report issues on the `GitHub Issues <https://github.com/yourusername/ci3_template/issues>`_ page
+- Report issues on the `GitHub Issues <https://github.com/yourusername/leverai-consulting/issues>`_ page
 - Submit pull requests for bug fixes and new features
 - Follow the existing code style and conventions
 

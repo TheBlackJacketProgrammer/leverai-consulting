@@ -5,45 +5,45 @@ class Model_Api extends CI_Model
 {
     public function get_user()
     {
-        $query = $this->db->query("SELECT * FROM get_customers()");
+        $query = $this->db->query("SELECT * FROM get_customers_consulting()");
         return $query->result_array();
     }
 
     // insert_user
     public function insert_user($data)
     {
-        return $this->db->insert('users', $data);
+        return $this->db->insert('users_consulting', $data);
     }
 
     // get_user_by_email
     public function get_user_by_email($email)
     {
-        return $this->db->where('email', $email)->get('users')->row();
+        return $this->db->where('email', $email)->get('users_consulting')->row();
     }
 
     // get_user_by_id
     public function get_user_by_id($user_id)
     {
-        return $this->db->where('id', $user_id)->get('users')->row();
+        return $this->db->where('id', $user_id)->get('users_consulting')->row();
     }
 
     // insert_billing
     public function insert_billing($data)
     {
-        return $this->db->insert('billing', $data);
+        return $this->db->insert('billing_consulting', $data);
     }
 
      // insert_subscription
      public function insert_subscription($data)
      {
-         return $this->db->insert('subscriptions', $data);
+         return $this->db->insert('subscriptions_consulting', $data);
      }
 
     // get_billing_by_customer
     public function get_billing_by_customer($customer_id)
     {
         return $this->db->where('stripe_customer_id', $customer_id)
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->row();
     }
 
@@ -52,7 +52,7 @@ class Model_Api extends CI_Model
     {
         return $this->db->where('user_id', $user_id)
                         ->order_by('created_at', 'DESC')
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->result();
     }
 
@@ -65,7 +65,7 @@ class Model_Api extends CI_Model
                      ->set('status', $status)
                      ->order_by('created_at', 'DESC')
                      ->limit(1)
-                     ->update('billing');
+                     ->update('billing_consulting');
         }
     }
 
@@ -74,7 +74,7 @@ class Model_Api extends CI_Model
     {
         $this->db->where('invoice_number', $invoice_number)
                  ->set('status', $status)
-                 ->update('billing');
+                 ->update('billing_consulting');
     }
 
     // mark_latest_invoice_as_paid
@@ -83,7 +83,7 @@ class Model_Api extends CI_Model
         $this->db->set('status', 'paid');
         $this->db->order_by('created_at', 'DESC');
         $this->db->limit(1);
-        $this->db->update('billing');
+        $this->db->update('billing_consulting');
     }
 
     // get_billing_by_session
@@ -91,7 +91,7 @@ class Model_Api extends CI_Model
     {
         try {
             $result = $this->db->where('stripe_session_id', $session_id)
-                              ->get('billing')
+                              ->get('billing_consulting')
                               ->row();
             
             if ($result) {
@@ -112,7 +112,7 @@ class Model_Api extends CI_Model
     {
         try {
             $result = $this->db->where('stripe_session_id', $session_id)
-                             ->update('billing', $data);
+                             ->update('billing_consulting', $data);
             
             if ($this->db->affected_rows() > 0) {
                 error_log('Model: Successfully updated billing record for session: ' . $session_id);
@@ -134,7 +134,7 @@ class Model_Api extends CI_Model
             error_log('Model: Updating billing by subscription ID: ' . $subscription_id . ' with data: ' . json_encode($data));
             
             $result = $this->db->where('stripe_subscription_id', $subscription_id)
-                             ->update('billing', $data);
+                             ->update('billing_consulting', $data);
             
             if ($this->db->affected_rows() > 0) {
                 error_log('Model: Successfully updated billing record by subscription ID: ' . $subscription_id);
@@ -153,7 +153,7 @@ class Model_Api extends CI_Model
     public function get_billing_by_subscription($subscription_id)
     {
         return $this->db->where('stripe_subscription_id', $subscription_id)
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->row();
     }
 
@@ -162,7 +162,7 @@ class Model_Api extends CI_Model
     {
         return $this->db->order_by('created_at', 'DESC')
                         ->limit(1)
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->row();
     }
 
@@ -172,7 +172,7 @@ class Model_Api extends CI_Model
         return $this->db->where('status', 'pending')
                         ->order_by('created_at', 'DESC')
                         ->limit(1)
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->row();
     }
 
@@ -183,7 +183,7 @@ class Model_Api extends CI_Model
                         ->where('status', 'pending')
                         ->order_by('created_at', 'DESC')
                         ->limit(1)
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->row();
     }
 
@@ -191,7 +191,7 @@ class Model_Api extends CI_Model
     public function update_billing_by_id($id, $data)
     {
         try {
-            $this->db->where('id', $id)->update('billing', $data);
+            $this->db->where('id', $id)->update('billing_consulting', $data);
             $success = $this->db->affected_rows() > 0;
             error_log('Model: ' . ($success ? 'Successfully updated' : 'No billing record found to update') . ' by ID: ' . $id);
             return $success;
@@ -213,7 +213,7 @@ class Model_Api extends CI_Model
         
         return $this->db->where('user_id', $user_id)
                         ->where('status', 'active')
-                        ->get('subscriptions')
+                        ->get('subscriptions_consulting')
                         ->row();
     }
 
@@ -226,7 +226,7 @@ class Model_Api extends CI_Model
             ];
             
             $result = $this->db->where('id', $subscription_id)
-                             ->update('subscriptions', $data);
+                             ->update('subscriptions_consulting', $data);
             
             if ($this->db->affected_rows() > 0) {
                 error_log('Model: Successfully updated subscription hours for ID: ' . $subscription_id);
@@ -251,7 +251,7 @@ class Model_Api extends CI_Model
         }
         
         $subscription = $this->db->where('user_id', $user_id)
-                        ->get('subscriptions')
+                        ->get('subscriptions_consulting')
                         ->row();
         
         return $subscription ? $subscription->hours_remaining : 0;
@@ -261,9 +261,9 @@ class Model_Api extends CI_Model
     public function get_all_tickets()
     {
         // return $this->db->order_by('created_at', 'DESC')
-        //                 ->get('tickets')
+        //                 ->get('tickets_consulting')
         //                 ->result_array();
-        $query = $this->db->query("SELECT * FROM get_tickets()");
+        $query = $this->db->query("SELECT * FROM get_tickets_consulting()");
         return $query->result_array();
     }
 
@@ -272,14 +272,14 @@ class Model_Api extends CI_Model
     {
         return $this->db->where('user_id', $user_id)
                         ->order_by('created_at', 'DESC')
-                        ->get('tickets')
+                        ->get('tickets_consulting')
                         ->result_array();
     }
     // get_ticket_by_id
     public function get_ticket_by_id($ticket_id)
     {
         return $this->db->where('ticket_id', $ticket_id)
-                        ->get('tickets')
+                        ->get('tickets_consulting')
                         ->row();
     }
 
@@ -287,25 +287,25 @@ class Model_Api extends CI_Model
     public function get_ticket_by_db_id($id)
     {
         return $this->db->where('id', $id)
-                        ->get('tickets')
+                        ->get('tickets_consulting')
                         ->row();
     }
 
     // get_ticket_details
     public function get_ticket_details($ticket_id)
     {
-        $query = $this->db->query("SELECT * FROM get_ticket_details('".$ticket_id."')");
+        $query = $this->db->query("SELECT * FROM get_ticket_details_consulting('".$ticket_id."')");
         return $query->row_array();
     }
 
     // get_all_ticket_comments_by_ticket_id
     public function get_all_ticket_comments_by_ticket_id($ticket_id)
     {
-        return $this->db->select('ticket_comments.*, users.name as user_name')
-                        ->from('ticket_comments')
-                        ->join('users', 'ticket_comments.user_id = users.id')
-                        ->where('ticket_comments.ticket_id', $ticket_id)
-                        ->order_by('ticket_comments.created_at', 'ASC')
+        return $this->db->select('ticket_comments_consulting.*, users_consulting.name as user_name')
+                        ->from('ticket_comments_consulting')
+                        ->join('users_consulting', 'ticket_comments_consulting.user_id = users_consulting.id')
+                        ->where('ticket_comments_consulting.ticket_id', $ticket_id)
+                        ->order_by('ticket_comments_consulting.created_at', 'ASC')
                         ->get()
                         ->result_array();
     }
@@ -317,7 +317,7 @@ class Model_Api extends CI_Model
             // Add created_at timestamp
             $data['created_at'] = date('Y-m-d H:i:s');
             
-            $result = $this->db->insert('tickets', $data);
+            $result = $this->db->insert('tickets_consulting', $data);
             
             if ($result) {
                 // Query the ticket by ticket_id to get the database ID (PostgreSQL-compatible)
@@ -339,7 +339,7 @@ class Model_Api extends CI_Model
     public function update_hours_remaining($user_id, $hours_remaining)
     {
         return $this->db->where('user_id', $user_id)
-                        ->update('subscriptions', ['hours_remaining' => $hours_remaining]);
+                        ->update('subscriptions_consulting', ['hours_remaining' => $hours_remaining]);
     }
 
     // delete_user_data - Remove all user data when subscription payment is cancelled
@@ -350,16 +350,16 @@ class Model_Api extends CI_Model
             $this->db->trans_start();
             
             // Delete user's tickets/requests
-            $this->db->where('user_id', $user_id)->delete('tickets');
+            $this->db->where('user_id', $user_id)->delete('tickets_consulting');
             
             // Delete user's subscriptions
-            $this->db->where('user_id', $user_id)->delete('subscriptions');
+            $this->db->where('user_id', $user_id)->delete('subscriptions_consulting');
             
             // Delete user's billing records
-            $this->db->where('user_id', $user_id)->delete('billing');
+            $this->db->where('user_id', $user_id)->delete('billing_consulting');
             
             // Delete the user account
-            $this->db->where('id', $user_id)->delete('users');
+            $this->db->where('id', $user_id)->delete('users_consulting');
             
             // Complete transaction
             $this->db->trans_complete();
@@ -382,23 +382,23 @@ class Model_Api extends CI_Model
     public function update_status($ticket_id, $status)
     {
         return $this->db->where('id', $ticket_id)
-                        ->update('tickets', ['status' => $status]);
+                        ->update('tickets_consulting', ['status' => $status]);
     }
 
     // send_comment
     public function send_comment($data)
     {
-        return $this->db->insert('ticket_comments', $data);
+        return $this->db->insert('ticket_comments_consulting', $data);
     }
 
     // get_all_comments_by_ticket_id
     public function get_all_comments_by_ticket_id($ticket_id)
     {
-        return $this->db->select('ticket_comments.*, users.name as user_name')
-                        ->from('ticket_comments')
-                        ->join('users', 'ticket_comments.user_id = users.id')
-                        ->where('ticket_comments.ticket_id', $ticket_id)
-                        ->order_by('ticket_comments.created_at', 'ASC')
+        return $this->db->select('ticket_comments_consulting.*, users_consulting.name as user_name')
+                        ->from('ticket_comments_consulting')
+                        ->join('users_consulting', 'ticket_comments_consulting.user_id = users_consulting.id')
+                        ->where('ticket_comments_consulting.ticket_id', $ticket_id)
+                        ->order_by('ticket_comments_consulting.created_at', 'ASC')
                         ->get()
                         ->result_array();
     }
@@ -407,13 +407,13 @@ class Model_Api extends CI_Model
     public function update_dedicate_hours($ticket_id, $dedicate_hours)
     {
         return $this->db->where('id', $ticket_id)
-                        ->update('tickets', ['dedicate_hours' => $dedicate_hours]);
+                        ->update('tickets_consulting', ['dedicate_hours' => $dedicate_hours]);
     }
 
     public function insert_notification($data)
     {
         // Insert the notification
-        $result = $this->db->insert('notifications', $data);
+        $result = $this->db->insert('notifications_consulting', $data);
         
         // Check for database errors
         $error = $this->db->error();
@@ -457,7 +457,7 @@ class Model_Api extends CI_Model
             $this->db->limit($limit);
         }
         
-        $query = $this->db->get('notifications');
+        $query = $this->db->get('notifications_consulting');
         return $query->result();
     }
 
@@ -465,7 +465,7 @@ class Model_Api extends CI_Model
     {
         $this->db->where('id', $notification_id);
         $this->db->set('is_read', 'TRUE', false);
-        $this->db->update('notifications');
+        $this->db->update('notifications_consulting');
     }
 
     public function mark_all_as_read($user_id, $user_role = null)
@@ -481,7 +481,7 @@ class Model_Api extends CI_Model
         
         $this->db->where('is_read', 'FALSE', false);
         $this->db->set('is_read', 'TRUE', false);
-        $this->db->update('notifications');
+        $this->db->update('notifications_consulting');
         return $this->db->affected_rows();
     }
 
@@ -489,21 +489,21 @@ class Model_Api extends CI_Model
     public function get_admin_users()
     {
         return $this->db->where('role', 'admin')
-                        ->get('users')
+                        ->get('users_consulting')
                         ->result();
     }
 
     // get_all_customers
     public function get_all_customers()
     {
-        $query = $this->db->query("SELECT * FROM get_user_subscriptions(NULL)");
+        $query = $this->db->query("SELECT * FROM get_user_subscriptions_consulting(NULL)");
         return $query->result_array();
     }
 
     // get_all_billing
     public function get_all_billing()
     {
-        $query = $this->db->query("SELECT * FROM public.get_user_billing()");
+        $query = $this->db->query("SELECT * FROM public.get_user_billing_consulting()");
         return $query->result_array();
     }
 
@@ -511,7 +511,7 @@ class Model_Api extends CI_Model
     public function get_billing_by_stripe_invoice_id($stripe_invoice_id)
     {
         return $this->db->where('stripe_invoice_id', $stripe_invoice_id)
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->row();
     }
 
@@ -521,7 +521,7 @@ class Model_Api extends CI_Model
         return $this->db->where('user_id', $user_id)
                         ->order_by('created_at', 'DESC')
                         ->limit(1)
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->row();
     }
 
@@ -531,7 +531,7 @@ class Model_Api extends CI_Model
         return $this->db->where('stripe_customer_id', $stripe_customer_id)
                         ->order_by('created_at', 'DESC')
                         ->limit(1)
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->row();
     }
 
@@ -539,7 +539,7 @@ class Model_Api extends CI_Model
     public function get_billing_by_invoice_number($invoice_number)
     {
         return $this->db->where('invoice_number', $invoice_number)
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->row();
     }
 
@@ -547,7 +547,7 @@ class Model_Api extends CI_Model
     public function get_billing_by_session_id($session_id)
     {
         return $this->db->where('stripe_session_id', $session_id)
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->row();
     }
 
@@ -555,7 +555,7 @@ class Model_Api extends CI_Model
     public function update_billing_by_session_id($session_id, $data)
     {
         return $this->db->where('stripe_session_id', $session_id)
-                        ->update('billing', $data);
+                        ->update('billing_consulting', $data);
     }
 
     // get_user_latest_pending_billing
@@ -565,7 +565,7 @@ class Model_Api extends CI_Model
                         ->where('status', 'pending')
                         ->order_by('created_at', 'DESC')
                         ->limit(1)
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->row();
     }
 
@@ -577,7 +577,7 @@ class Model_Api extends CI_Model
                         ->where('status', 'pending')
                         ->order_by('created_at', 'DESC')
                         ->limit(1)
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->row();
     }
 
@@ -606,7 +606,7 @@ class Model_Api extends CI_Model
             if ($existing) {
                 // Update existing invoice - use ID for more reliable update
                 $this->db->where('id', $existing->id)
-                         ->update('billing', $invoice_data);
+                         ->update('billing_consulting', $invoice_data);
                 
                 error_log('Model: Updated existing invoice - ID: ' . $existing->id . ', Stripe Invoice ID: ' . ($invoice_data['stripe_invoice_id'] ?? 'N/A') . ', Invoice Number: ' . ($invoice_data['invoice_number'] ?? 'N/A') . ', Status: ' . $invoice_data['status']);
                 return ['action' => 'updated', 'id' => $existing->id];
@@ -615,7 +615,7 @@ class Model_Api extends CI_Model
                 error_log('Model: Inserting invoice - Stripe Invoice ID: ' . ($invoice_data['stripe_invoice_id'] ?? 'N/A') . ', Invoice Number: ' . ($invoice_data['invoice_number'] ?? 'N/A') . ', Status: ' . $invoice_data['status']);
                 
                 try {
-                    $result = $this->db->insert('billing', $invoice_data);
+                    $result = $this->db->insert('billing_consulting', $invoice_data);
                     
                     if (!$result) {
                         $error = $this->db->error();
@@ -636,7 +636,7 @@ class Model_Api extends CI_Model
                             $existing = $this->get_billing_by_invoice_number($invoice_data['invoice_number']);
                             if ($existing) {
                                 $this->db->where('id', $existing->id)
-                                         ->update('billing', $invoice_data);
+                                         ->update('billing_consulting', $invoice_data);
                                 error_log('Model: Updated existing invoice after duplicate key error - ID: ' . $existing->id);
                                 return ['action' => 'updated', 'id' => $existing->id];
                             }
@@ -648,7 +648,7 @@ class Model_Api extends CI_Model
                             $existing = $this->get_billing_by_stripe_invoice_id($invoice_data['stripe_invoice_id']);
                             if ($existing) {
                                 $this->db->where('id', $existing->id)
-                                         ->update('billing', $invoice_data);
+                                         ->update('billing_consulting', $invoice_data);
                                 error_log('Model: Updated existing invoice after duplicate key error (by stripe_invoice_id) - ID: ' . $existing->id);
                                 return ['action' => 'updated', 'id' => $existing->id];
                             }
@@ -676,7 +676,7 @@ class Model_Api extends CI_Model
                             $existing = $this->get_billing_by_invoice_number($invoice_data['invoice_number']);
                             if ($existing) {
                                 $this->db->where('id', $existing->id)
-                                         ->update('billing', $invoice_data);
+                                         ->update('billing_consulting', $invoice_data);
                                 error_log('Model: Updated existing invoice after duplicate key exception (by invoice_number) - ID: ' . $existing->id);
                                 return ['action' => 'updated', 'id' => $existing->id];
                             }
@@ -687,7 +687,7 @@ class Model_Api extends CI_Model
                             $existing = $this->get_billing_by_stripe_invoice_id($invoice_data['stripe_invoice_id']);
                             if ($existing) {
                                 $this->db->where('id', $existing->id)
-                                         ->update('billing', $invoice_data);
+                                         ->update('billing_consulting', $invoice_data);
                                 error_log('Model: Updated existing invoice after duplicate key exception (by stripe_invoice_id) - ID: ' . $existing->id);
                                 return ['action' => 'updated', 'id' => $existing->id];
                             }
@@ -730,7 +730,7 @@ class Model_Api extends CI_Model
                         $existing = $this->get_billing_by_invoice_number($invoice_data['invoice_number']);
                         if ($existing) {
                             $this->db->where('id', $existing->id)
-                                     ->update('billing', $invoice_data);
+                                     ->update('billing_consulting', $invoice_data);
                             error_log('Model: Updated existing invoice after duplicate key exception (by invoice_number) - ID: ' . $existing->id);
                             return ['action' => 'updated', 'id' => $existing->id];
                         }
@@ -741,7 +741,7 @@ class Model_Api extends CI_Model
                         $existing = $this->get_billing_by_stripe_invoice_id($invoice_data['stripe_invoice_id']);
                         if ($existing) {
                             $this->db->where('id', $existing->id)
-                                     ->update('billing', $invoice_data);
+                                     ->update('billing_consulting', $invoice_data);
                             error_log('Model: Updated existing invoice after duplicate key exception (by stripe_invoice_id) - ID: ' . $existing->id);
                             return ['action' => 'updated', 'id' => $existing->id];
                         }
@@ -761,28 +761,28 @@ class Model_Api extends CI_Model
         return $this->db->select('DISTINCT stripe_customer_id, user_id')
                         ->where('stripe_customer_id IS NOT NULL')
                         ->where('stripe_customer_id !=', '')
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->result();
     }
 
     // Getting the revenue for the previous and current month
     public function get_billing_totals_prev_curr()
     {
-        $query = $this->db->query("SELECT * FROM get_billing_totals_prev_curr()");
+        $query = $this->db->query("SELECT * FROM get_billing_totals_prev_curr_consulting()");
         return $query->result_array();
     }
 
     // Getting Active Plan Count per Plan Name
     public function get_active_plan_counts()
     {
-        $query = $this->db->query("SELECT * FROM get_active_plan_counts()");
+        $query = $this->db->query("SELECT * FROM get_active_plan_counts_consulting()");
         return $query->result_array();
     }
 
     // Getting the Ticket Count per Status
     public function get_ticket_counts_by_status()
     {
-        $query = $this->db->query("SELECT * FROM get_ticket_counts_by_status()");
+        $query = $this->db->query("SELECT * FROM get_ticket_counts_by_status_consulting()");
         return $query->result_array();
     }
 
@@ -806,7 +806,7 @@ class Model_Api extends CI_Model
         return $this->db->select('user_id')
                         ->where('stripe_customer_id', $customer_id)
                         ->where('billing_type', 'new subscription')
-                        ->get('billing')
+                        ->get('billing_consulting')
                         ->row();
     }
 
@@ -815,7 +815,7 @@ class Model_Api extends CI_Model
     {
         return $this->db->select('email')
                         ->where('id', $id)
-                        ->get('users')
+                        ->get('users_consulting')
                         ->row();
     }
 
@@ -823,7 +823,7 @@ class Model_Api extends CI_Model
     public function get_user_profile($user_id)
     {
         return $this->db->where('id', $user_id)
-                        ->get('users')
+                        ->get('users_consulting')
                         ->row();
     }
 
@@ -831,6 +831,6 @@ class Model_Api extends CI_Model
     public function update_user_profile($user_id, $data)
     {
         return $this->db->where('id', $user_id)
-                        ->update('users', $data);
+                        ->update('users_consulting', $data);
     }
 }   

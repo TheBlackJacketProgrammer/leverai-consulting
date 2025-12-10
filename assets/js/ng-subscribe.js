@@ -63,10 +63,10 @@ app.controller("ng-subscribe", ['$scope', '$http', function ($scope, $http) {
         const hostname = window.location.hostname;
         const currentPath = window.location.pathname;
         const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('localhost');
-        const hasCi3Template = currentPath.includes('/ci3_template/');
+        const hasCi3Template = currentPath.includes('/leverai-consulting/');
         
-        // Use ci3_template path if we're local OR if the current URL contains ci3_template
-        const apiUrl = (isLocal || hasCi3Template) ? '/ci3_template/api/register_and_checkout' : '/api/register_and_checkout';
+        // Use leverai-consulting path if we're local OR if the current URL contains leverai-consulting
+        const apiUrl = (isLocal || hasCi3Template) ? '/leverai-consulting/api/register_and_checkout' : '/api/register_and_checkout';
         
         $http.post(apiUrl, payload)
         .then(function(response) {

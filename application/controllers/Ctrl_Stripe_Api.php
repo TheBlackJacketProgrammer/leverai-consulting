@@ -890,7 +890,7 @@ class Ctrl_Stripe_Api extends CI_Controller {
                 
                 // Update subscription end date
                 $this->db->where('id', $subscription->id)
-                         ->update('subscriptions', [
+                         ->update('subscriptions_consulting', [
                              'end_date' => $new_end_date,
                              'status' => 'active'
                          ]);
