@@ -5,12 +5,12 @@
         <div class="logo">
             <a href="<?php echo base_url(); ?>" class="flex flex-col w-fit group no-underline hover:no-underline active:no-underline focus:no-underline outline-none">
                 <div class="self-start text-lg md:text-xl font-bold tracking-[0.2em] text-cyan-400 uppercase leading-none group-hover:text-cyan-300 transition-colors whitespace-nowrap">LEVER <span class="font-normal">AI</span></div>
-                <div class="self-end text-[0.5rem] md:text-[0.6rem] tracking-[0.3em] text-white uppercase text-right group-hover:text-gray-200 transition-colors">DEVELOPMENT</div>
+                <div class="self-end text-[0.5rem] md:text-[0.6rem] tracking-[0.3em] text-white uppercase text-right group-hover:text-gray-200 transition-colors">CONSULTING</div>
             </a>
         </div>
         <nav>
             <a href="<?php echo base_url('login'); ?>" class="login-link text-xs md:text-sm">Login</a>
-            <button class="btn-cyan text-[0.65rem] md:text-sm font-bold px-3 py-1.5 md:px-6 md:py-2.5 rounded-md shadow-[0_0_20px_rgba(0,194,255,0.3)] hover:shadow-[0_0_30px_rgba(0,194,255,0.5)] transition-all duration-300 whitespace-nowrap" ng-click="openModal('modal_developerlogin')">Start Building</button>
+            <button class="btn-cyan text-[0.65rem] md:text-sm font-bold px-3 py-1.5 md:px-6 md:py-2.5 rounded-md shadow-[0_0_20px_rgba(0,194,255,0.3)] hover:shadow-[0_0_30px_rgba(0,194,255,0.5)] transition-all duration-300 whitespace-nowrap" ng-click="openModal('modal_developerlogin')">Get started</button>
         </nav>
     </header>
 <?php else: ?>
