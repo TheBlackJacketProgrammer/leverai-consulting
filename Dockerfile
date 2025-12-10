@@ -16,9 +16,12 @@ RUN apt-get update \
        git \
        libpq-dev \
        curl \
+       ca-certificates \
+       openssl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install -j"$(nproc)" gd mysqli mbstring zip pdo pdo_pgsql pgsql \
+    && docker-php-ext-install -j"$(nproc)" gd mysqli mbstring zip pdo pdo_pgsql pgsql sockets \
+    && update-ca-certificates \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

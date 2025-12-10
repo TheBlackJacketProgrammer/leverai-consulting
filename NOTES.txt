@@ -1,8 +1,0 @@
-PROGRAMMER'S NOTE
-Created by: Marvin Bergado
-==============================================================================================
-
-Date: 10-02-2025
-
-UPDATES:
-    * Clean Project Template
