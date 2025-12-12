@@ -34,16 +34,21 @@ command -v git >/dev/null 2>&1 || { err "git not found"; exit 1; }
 command -v docker >/dev/null 2>&1 || { err "docker not found"; exit 1; }
 
 
+# Install PHP dependencies
+if [[ -f "composer.json" ]] && command -v composer >/dev/null 2>&1; then
+    info "Installing PHP dependencies"
+    composer install --no-dev --optimize-autoloader --quiet
+fi
 
+# Install Node dependencies
 info "Installing npm dependencies"
-npm install
+# Optimized npm install
+npm install --no-audit --no-fund --quiet
 
 info "Building assets (SCSS, Tailwind, JS)"
 npm run build
 
-info "Stopping current containers"
-docker compose down
-
+# Docker Operations
 if [[ "$PRUNE" -eq 1 ]]; then
   info "Pruning dangling images and containers"
   docker system prune -f
@@ -54,6 +59,7 @@ if [[ "$NO_BUILD" -eq 1 ]]; then
   docker compose up -d
 else
   info "Rebuilding images and restarting containers"
+  # .dockerignore ensures this is fast by excluding node_modules
   docker compose up -d --build
 fi
 

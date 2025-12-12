@@ -7,11 +7,7 @@ module.exports = {
     "./assets/js/**/*.js",
     "./*.php"
   ],
-  safelist: [
-    {
-      pattern: /.*/,
-    },
-  ],
+  safelist: [],
   theme: {
     extend: {
       colors: {
