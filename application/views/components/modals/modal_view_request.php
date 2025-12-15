@@ -114,61 +114,111 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col gap-2 w-full px-4">
-                <p class="text-sm">
-                    <span class=" text-white font-semibold">Request Description</span>
-                </p>
-                <div class="divider"></div>
-            </div>
-            <div class="ticket-description container">
-                <textarea readonly class="text-8 font-sm font-light w-full resize-none" rows="4">{{ ticketDetails.details }}</textarea>
-            </div>
-            <div class="ticket-comments container mt-2">
-                <p class="text-sm space-y-1">
-                    <span class=" text-white font-semibolds">Comments</span>
-                </p>
-                <div class="divider mb-2"></div>
-                <div class="comments-container" ng-class="{'scrollable': ticketComments.length >= 3}">
-                    <div class="flex flex-row gap-2" ng-repeat="comment in ticketComments">
-                        <div class="flex flex-col gap-1 items-start justify-start w-10">
-                            <div class="w-10 h-10 bg-black rounded-full flex items-center justify-center">
-                                <p class="primary text-sm font-semibold">{{ comment.usertype == 'admin' ? 'LAI' : (comment.user_name ? comment.user_name.charAt(0).toUpperCase() : 'C') }}</p>
-                            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full mt-4">
+                <div class="col-span-1">
+                    <div class="flex flex-col items-center justify-center roadmap mb-4 pb-4">
+                        <h5 class="text-white mb-3 mt-4">Roadmap</h5>
+                        <div class="status-box active">
+                            <p class="text-white status-name">SUBMITTED</p>
+                            <p class="status-subname">(Pre-Work)</p>
                         </div>
-                        <div class="flex flex-col gap-1 w-full">
-                            <h5 class="primary font-semibold">{{ comment.usertype == 'admin' ? 'Lever A.I Dev Team' : (comment.user_name || 'Customer') }}</h5>
-                            <p class="text-sm text-8 text-white">{{ comment.message }}</p>
-                            <p class="dt-tag">{{ comment.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
-                            <p class="dt-error" ng-if="comment.error">Error in sending comment</p>
+                        <span class="arrow-down"></span>
+                        <div class="status-box">
+                            <p class="text-white status-name">UNDER REVIEW</p>
+                            <p>(Pre-Work)</p>
                         </div>
-                    </div>
-                    <div ng-if="ticketComments.length === 0" class="text-center py-4">
-                        <p class="text-gray-400 text-sm">No Comments Yet</p>
+                        <span class="arrow-down"></span>
+                        <div class="status-box">
+                            <p class="text-white status-name">AWAITING CLIENT</p>
+                            <p>(Paused)</p>
+                        </div>
+                        <span class="arrow-down"></span>
+                        <div class="status-box">
+                            <p class="text-white status-name">SCHEDULED</p>
+                            <p>(Edge Case)</p>
+                        </div>
+                        <span class="arrow-down"></span>
+                        <div class="status-box">
+                            <p class="text-white status-name">IN PROGRESS</p>
+                            <p>(Active)</p>
+                        </div>
+                        <span class="arrow-down"></span>
+                        <div class="status-box">
+                            <p class="text-white status-name">INTERNAL QA</p>
+                            <p>(Active)</p>
+                        </div>
+                        <span class="arrow-down"></span>
+                        <div class="status-box">
+                            <p class="text-white status-name">DELIVERED</p>
+                            <p>(Handover)</p>
+                        </div>
+                        <span class="arrow-down"></span>
+                        <div class="status-box">
+                            <p class="text-white status-name">REVISION REQUESTED</p>
+                            <p>(Edge Case)</p>
+                        </div>
+                        <span class="arrow-down"></span>
+                        <div class="status-box">
+                            <p class="text-white status-name">IN <PRe></PRe></p>
+                            <p>(For Revision)</p>
+                        </div>
+                        <span class="arrow-down"></span>
+                        <div class="status-box">
+                            <p class="text-white status-name">CLOSED</p>
+                            <p>(Completed)</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="flex items-center justify-center gap-2 w-full" ng-if="ticketDetails.status == 'Rejected'">
-                <p class="text-sm text-white">Ticket has been rejected and closed.</p>
-            </div>
-            <div class="flex items-center gap-2 w-full" ng-if="ticketDetails.status != 'Rejected'">
-                <!-- Upload Icon -->
-                <button class="p-2 btn-secondary-transparent">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 12V4m0 0l-4 4m4-4l4 4" />
-                    </svg>
-                </button>
+                <div class="col-span-2">
+                    <div class="flex flex-col gap-2">
+                        <p class="text-sm text-white font-semibold">Request Description</p>
+                        <!-- <div class="divider"></div> -->
+                        <div class="ticket-description scrollable">
+                            <!-- <textarea readonly class="text-8 font-sm font-light w-full resize-none" rows="4">{{ ticketDetails.details }}</textarea> -->
+                            <p>{{ ticketDetails.details }}</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <p class="text-sm text-white font-semibold mt-4">Comments</p>
+                        <!-- <div class="divider"></div> -->
+                        <div class="comments-container" ng-class="{'scrollable': ticketComments.length >= 3}">
+                            <div class="flex flex-row gap-2" ng-repeat="comment in ticketComments">
+                                <div class="flex flex-col gap-1 items-start justify-start w-10">
+                                    <div class="w-10 h-10 bg-black rounded-full flex items-center justify-center">
+                                        <p class="primary text-sm font-semibold">{{ comment.usertype == 'admin' ? 'LAI' : (comment.user_name ? comment.user_name.charAt(0).toUpperCase() : 'C') }}</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-1 w-full">
+                                    <h5 class="primary font-semibold">{{ comment.usertype == 'admin' ? 'Lever A.I Dev Team' : (comment.user_name || 'Customer') }}</h5>
+                                    <p class="text-sm text-8 text-white">{{ comment.message }}</p>
+                                    <p class="dt-tag">{{ comment.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
+                                    <p class="dt-error" ng-if="comment.error">Error in sending comment</p>
+                                </div>
+                            </div>
+                            <div ng-if="ticketComments.length === 0" class="text-center py-4">
+                                <p class="text-gray-400 text-sm">No Comments Yet</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center gap-2 w-full" ng-if="ticketDetails.status == 'Rejected'">
+                            <p class="text-sm text-white">Ticket has been rejected and closed.</p>
+                        </div>
+                        <div class="flex items-center gap-2 w-full" ng-if="ticketDetails.status != 'Rejected'">
+                        
+                            <!-- Input Field -->
+                            <textarea ng-model="commentData.text" ng-disabled="sendingComment"
+                                placeholder="Type your comment here..."
+                                rows="1">
+                            </textarea>
 
-                <!-- Input Field -->
-                <textarea ng-model="commentData.text" ng-disabled="sendingComment"
-                    placeholder="Type your comment here..."
-                    rows="1">
-                </textarea>
-
-                <!-- Send Button -->
-                <button class="btn-primary" ng-click="sendComment(ticketDetails)" ng-disabled="sendingComment">
-                    <span ng-if="!sendingComment">Send</span>
-                    <span ng-if="sendingComment">Sending...</span>
-                </button>
+                            <!-- Send Button -->
+                            <button class="btn-primary" ng-click="sendComment(ticketDetails)" ng-disabled="sendingComment">
+                                <span ng-if="!sendingComment">Send</span>
+                                <span ng-if="sendingComment">Sending...</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

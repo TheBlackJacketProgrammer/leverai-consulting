@@ -18,8 +18,9 @@ application/logs/*
 !application/*/.htaccess
 
 # Environment-specific config (sensitive data)
-application/config/database.php
-application/config/stripe.php
+# application/config/database.php
+# application/config/stripe.php
+# application/config/routes.php
 
 # assets/devtools/*
 

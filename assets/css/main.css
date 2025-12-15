@@ -1577,9 +1577,17 @@ div.modal .modal-dialog-box .modal-body .input-wrapper input:hover {
 /* Modal View Request */
 .modal_view_request {
   padding-top: 1% !important;
+  overflow-y: auto;
+}
+@media (width <= 768px) {
+  .modal_view_request {
+    overflow-y: hidden;
+    padding-top: 0 !important;
+  }
 }
 .modal_view_request .modal-dialog-box {
   max-width: 996px !important;
+  margin-bottom: 16px;
 }
 @media (width <= 768px) {
   .modal_view_request .modal-dialog-box {
@@ -1604,74 +1612,53 @@ div.modal .modal-dialog-box .modal-body .input-wrapper input:hover {
   align-items: center !important;
   background-color: #000000;
 }
-.modal_view_request .modal-dialog-box .ticket-comments, .modal_view_request .modal-dialog-box .ticket-description {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
-  gap: 8px;
-  padding: 0px 8px 16px 16px;
-  background-color: none !important;
-  border: none !important;
-  border-bottom: 1px solid #dddddd !important;
-  border-radius: 0 !important;
-}
 .modal_view_request .modal-dialog-box .ticket-description {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
-  gap: 8px;
-  padding: 0px 8px 0px 16px;
-  background-color: transparent !important;
-  border: none !important;
-  border-bottom: none !important;
-  border-radius: 0 !important;
-}
-.modal_view_request .modal-dialog-box .ticket-description textarea {
-  width: 100%;
-  padding: 0px !important;
-  background-color: #222222;
-  border: none !important;
-  border-radius: 0px !important;
-  color: #cccccc;
-  font-size: 14px !important;
-  font-weight: 400 !important;
-  font-family: "Roboto", sans-serif !important;
-  min-height: 80px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-.modal_view_request .modal-dialog-box .ticket-description textarea::-webkit-scrollbar {
-  width: 6px;
-}
-.modal_view_request .modal-dialog-box .ticket-description textarea::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
-.modal_view_request .modal-dialog-box .ticket-description textarea::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
-}
-.modal_view_request .modal-dialog-box .ticket-description textarea::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
-.modal_view_request .modal-dialog-box .ticket-description textarea:focus {
-  outline: none;
-  border-color: #555;
-}
-.modal_view_request .modal-dialog-box .comments-container {
-  width: 100%;
+  height: 100%;
+  background-color: #333333;
+  padding: 8px;
+  border-radius: 8px;
   max-height: none;
   overflow: visible;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-bottom: 16px;
+}
+.modal_view_request .modal-dialog-box .ticket-description.scrollable {
+  max-height: 335px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+.modal_view_request .modal-dialog-box .ticket-description.scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+.modal_view_request .modal-dialog-box .ticket-description.scrollable::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+.modal_view_request .modal-dialog-box .ticket-description.scrollable::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+.modal_view_request .modal-dialog-box .ticket-description.scrollable::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+.modal_view_request .modal-dialog-box .comments-container {
+  width: 100%;
+  height: 100%;
+  background-color: #333333;
+  padding: 8px;
+  border-radius: 8px;
+  max-height: none;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 .modal_view_request .modal-dialog-box .comments-container.scrollable {
-  max-height: 150px;
+  max-height: 350px;
   overflow-y: auto;
   padding-right: 8px;
 }
@@ -1762,6 +1749,51 @@ div.modal .modal-dialog-box .modal-body .input-wrapper input:hover {
   background-color: #222222;
   border: 1px solid #dddddd;
   color: #ffffff;
+}
+.modal_view_request .modal-dialog-box .roadmap {
+  background-color: #333333;
+  border-radius: 8px;
+}
+.modal_view_request .modal-dialog-box .roadmap .status-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  padding: 8px;
+  width: 100%;
+  max-width: 200px;
+  background: linear-gradient(to right, #222222 0%, #6E6E6E 100%);
+}
+.modal_view_request .modal-dialog-box .roadmap .active {
+  background: linear-gradient(to right, #222222 0%, #02C5FE 100%);
+}
+.modal_view_request .modal-dialog-box .roadmap .active .status-name {
+  color: #000000;
+  font-weight: 800;
+}
+.modal_view_request .modal-dialog-box .roadmap .active .status-subname {
+  color: #000000;
+}
+.modal_view_request .modal-dialog-box .roadmap .arrow-down {
+  position: relative;
+  width: 2px;
+  height: 12px;
+  background: #ffffff;
+  display: inline-block;
+}
+.modal_view_request .modal-dialog-box .roadmap .arrow-down::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #ffffff;
 }
 
 .modal_topUp {
