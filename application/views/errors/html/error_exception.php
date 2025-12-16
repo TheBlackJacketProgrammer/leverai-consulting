@@ -1,12 +1,21 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+
+// Safely get base URL for error pages (URL helper may not be loaded)
+if (!function_exists('base_url')) {
+    $base_url = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http')
+        . '://' . $_SERVER['HTTP_HOST']
+        . str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+} else {
+    $base_url = base_url();
+}
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <title>Exception Error</title>
-    <link rel="stylesheet" href="<?php echo base_url('assets/css/main.css'); ?>">
-    <link rel="stylesheet" href="<?php echo base_url('assets/css/tailwind.css'); ?>">
+    <link rel="stylesheet" href="<?php echo $base_url . 'assets/css/main.css'; ?>">
+    <link rel="stylesheet" href="<?php echo $base_url . 'assets/css/tailwind.css'; ?>">
 </head>
 <body class="bg-extra flex items-center justify-center">
     <div class="w-full mx-auto p-8">
