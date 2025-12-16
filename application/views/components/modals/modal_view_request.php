@@ -46,10 +46,18 @@
                         <div>
                             <label for="status" class="font-medium text-white block mb-1">Status</label>
                             <select id="status" ng-model="ticketDetails.status" ng-change="updateStatus(ticketDetails)">
-                                <option value="Ongoing" ng-selected="ticketDetails.status == 'Ongoing'">Ongoing</option>
-                                <option value="Implemented" ng-selected="ticketDetails.status == 'Implemented'">Implemented</option>
-                                <option value="Rejected" ng-selected="ticketDetails.status == 'Rejected'">Rejected</option>
-                                <option value="Pending" ng-selected="ticketDetails.status == 'Pending'">Pending</option>
+                                <option value="Submitted" ng-selected="ticketDetails.status == 'Submitted'">Submitted</option>
+                                <option value="Under Review" ng-selected="ticketDetails.status == 'Under Review'">Under Review</option>
+                                <option value="Awaiting Client" ng-selected="ticketDetails.status == 'Awaiting Client'">Awaiting Client</option>
+                                <option value="Scheduled" ng-selected="ticketDetails.status == 'Scheduled'">Scheduled</option>
+                                <option value="In Progress" ng-selected="ticketDetails.status == 'In Progress'">In Progress</option>
+                                <option value="Internal QA" ng-selected="ticketDetails.status == 'Internal QA'">Internal QA</option>
+                                <option value="Delivered" ng-selected="ticketDetails.status == 'Delivered'">Delivered</option>
+                                <option value="Revision Requested" ng-selected="ticketDetails.status == 'Revision Requested'">Revision Requested</option>
+                                <option value="Ongoing for Revision" ng-selected="ticketDetails.status == 'Ongoing for Revision'">Ongoing for Revision</option>
+                                <option value="Closed" ng-selected="ticketDetails.status == 'Closed'">Closed</option>
+                                <option value="On Hold" ng-selected="ticketDetails.status == 'On Hold'">On Hold</option>
+                                <option value="Blocked" ng-selected="ticketDetails.status == 'Blocked'">Blocked</option>
                             </select>
                         </div>
                     </div>
@@ -119,52 +127,60 @@
                 <div class="col-span-1">
                     <div class="flex flex-col items-center justify-center roadmap mb-4 pb-4">
                         <h5 class="text-white mb-3 mt-4">Roadmap</h5>
-                        <div class="status-box active">
+                        <div class="status-box" ng-class="{'active': ticketDetails.status == 'Submitted'}">
                             <p class="text-white status-name">SUBMITTED</p>
                             <p class="status-subname">(Pre-Work)</p>
                         </div>
                         <span class="arrow-down"></span>
-                        <div class="status-box">
+                        <div class="status-box" ng-class="{'active': ticketDetails.status == 'Under Review'}">
                             <p class="text-white status-name">UNDER REVIEW</p>
                             <p>(Pre-Work)</p>
                         </div>
                         <span class="arrow-down"></span>
-                        <div class="status-box">
+                        <div class="status-box" ng-class="{'active': ticketDetails.status == 'Awaiting Client'}">
                             <p class="text-white status-name">AWAITING CLIENT</p>
                             <p>(Paused)</p>
                         </div>
                         <span class="arrow-down"></span>
-                        <div class="status-box">
+                        <div class="status-box" ng-class="{'active': ticketDetails.status == 'Scheduled'}">
                             <p class="text-white status-name">SCHEDULED</p>
                             <p>(Edge Case)</p>
                         </div>
                         <span class="arrow-down"></span>
-                        <div class="status-box">
+                        <div class="status-box" ng-class="{'active': ticketDetails.status == 'In Progress'}">
                             <p class="text-white status-name">IN PROGRESS</p>
                             <p>(Active)</p>
                         </div>
                         <span class="arrow-down"></span>
-                        <div class="status-box">
+                        <div class="status-box" ng-class="{'active': ticketDetails.status == 'Blocked'}" ng-if="ticketDetails.status == 'Blocked'">
+                            <p class="text-white status-name">BLOCKED</p>
+                            <p>(Active)</p>
+                        </div>
+                        <div class="status-box" ng-class="{'active': ticketDetails.status == 'Internal QA'}" ng-if="ticketDetails.status == 'Internal QA'">
                             <p class="text-white status-name">INTERNAL QA</p>
                             <p>(Active)</p>
                         </div>
+                        <div class="status-box" ng-class="{'active': ticketDetails.status == 'On Hold'}" ng-if="ticketDetails.status == 'On Hold'">
+                            <p class="text-white status-name">ON HOLD</p>
+                            <p>(Active)</p>
+                        </div>
                         <span class="arrow-down"></span>
-                        <div class="status-box">
+                        <div class="status-box" ng-class="{'active': ticketDetails.status == 'Delivered'}">
                             <p class="text-white status-name">DELIVERED</p>
                             <p>(Handover)</p>
                         </div>
                         <span class="arrow-down"></span>
-                        <div class="status-box">
+                        <div class="status-box" ng-class="{'active': ticketDetails.status == 'Revision Requested'}">
                             <p class="text-white status-name">REVISION REQUESTED</p>
                             <p>(Edge Case)</p>
                         </div>
                         <span class="arrow-down"></span>
-                        <div class="status-box">
-                            <p class="text-white status-name">IN <PRe></PRe></p>
+                        <div class="status-box" ng-class="{'active': ticketDetails.status == 'Ongoing for Revision'}">
+                            <p class="text-white status-name">ONGOING FOR REVISION</p>
                             <p>(For Revision)</p>
                         </div>
                         <span class="arrow-down"></span>
-                        <div class="status-box">
+                        <div class="status-box" ng-class="{'active': ticketDetails.status == 'Closed'}">
                             <p class="text-white status-name">CLOSED</p>
                             <p>(Completed)</p>
                         </div>

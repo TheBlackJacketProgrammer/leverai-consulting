@@ -1626,7 +1626,7 @@ div.modal .modal-dialog-box .modal-body .input-wrapper input:hover {
   margin-bottom: 16px;
 }
 .modal_view_request .modal-dialog-box .ticket-description.scrollable {
-  max-height: 335px;
+  max-height: 300px;
   overflow-y: auto;
   padding-right: 8px;
 }
@@ -1658,7 +1658,7 @@ div.modal .modal-dialog-box .modal-body .input-wrapper input:hover {
   margin-bottom: 16px;
 }
 .modal_view_request .modal-dialog-box .comments-container.scrollable {
-  max-height: 350px;
+  max-height: 310px;
   overflow-y: auto;
   padding-right: 8px;
 }
