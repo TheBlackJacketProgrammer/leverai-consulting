@@ -18,6 +18,8 @@ RUN apt-get update \
        curl \
        ca-certificates \
        openssl \
+       nodejs \
+       npm \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install -j"$(nproc)" gd mysqli mbstring zip pdo pdo_pgsql pgsql sockets \
@@ -37,8 +39,8 @@ WORKDIR /var/www/html
 # Copy application into container
 COPY . /var/www/html
 
-# JavaScript assets are built on the host prior to image build
-# to work seamlessly with bind mounts in docker-compose.
+# Install npm dependencies and build assets (SCSS, Tailwind, JS)
+RUN npm install && chmod -R +x node_modules/.bin && npm run build
 
 # Ensure proper permissions for writable directories
 RUN chown -R www-data:www-data /var/www/html \
