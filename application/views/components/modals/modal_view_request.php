@@ -164,7 +164,7 @@
                             <p class="text-white status-name">ON HOLD</p>
                             <p>(Active)</p>
                         </div>
-                        <span class="arrow-down"></span>
+                        <span class="arrow-down" ng-if="ticketDetails.status == 'Blocked' || ticketDetails.status == 'Internal QA' || ticketDetails.status == 'On Hold'"></span>
                         <div class="status-box" ng-class="{'active': ticketDetails.status == 'Delivered'}">
                             <p class="text-white status-name">DELIVERED</p>
                             <p>(Handover)</p>
