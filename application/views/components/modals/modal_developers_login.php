@@ -59,6 +59,7 @@
         function closeModal(modalId) {
             $('#' + modalId).removeClass('flex');
             $('#' + modalId).addClass('hidden');
+            $('body').removeClass('modal-open');
         }
 
         function authenticateDeveloper() {

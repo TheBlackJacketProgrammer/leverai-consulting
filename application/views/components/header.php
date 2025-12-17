@@ -18,10 +18,10 @@
     <header class="header-main" ng-controller="ng-header" style="padding: 20px 0;">
       <div class="flex flex-row items-center justify-between">
         <div class="company-logo">
-            <a href="<?php echo base_url(); ?>" class="flex flex-col w-fit group no-underline hover:no-underline active:no-underline focus:no-underline outline-none">
-                <div class="self-start text-lg md:text-xl font-bold tracking-[0.2em] text-cyan-400 uppercase leading-none group-hover:text-cyan-300 transition-colors whitespace-nowrap">LEVER <span class="font-normal">AI</span></div>
-                <div class="self-end text-[0.5rem] md:text-[0.6rem] tracking-[0.3em] text-white uppercase text-right group-hover:text-gray-200 transition-colors">DEVELOPMENT</div>
-            </a>
+          <a href="<?php echo base_url(); ?>" class="flex flex-col w-fit group no-underline hover:no-underline active:no-underline focus:no-underline outline-none">
+              <div class="self-start text-lg md:text-xl font-bold tracking-[0.2em] text-cyan-400 uppercase leading-none group-hover:text-cyan-300 transition-colors whitespace-nowrap">LEVER <span class="font-normal">AI</span></div>
+              <div class="self-end text-[0.5rem] md:text-[0.6rem] tracking-[0.3em] text-white uppercase text-right group-hover:text-gray-200 transition-colors">CONSULTING</div>
+          </a>
         </div>
         <nav>
           <div class="flex flex-row items-center justify-end gap-4">

@@ -76,6 +76,15 @@ app.controller("ng-variables", ['$scope', function($scope) {
             // Set the base URL
             $scope.baseUrl = window.location.protocol + '//' + window.location.host + baseUrl;
         };
+
+        $scope.openModal = function(modalId) {
+          console.log('Open Modal called');
+          $('#' + modalId).removeClass('hidden');
+          $('#' + modalId).addClass('flex');
+          
+          // Disable page scroll when modal is open
+          $('body').addClass('modal-open');
+        };
         
         // Initialize the controller
         $scope.init();

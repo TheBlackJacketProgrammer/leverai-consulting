@@ -39,8 +39,8 @@
                 </h1>
                 <p class="text-gray-400 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-light">
                     You know Al can grow your business and automation can slash costs, but you
-don't know where to start. We uncover the opportunities that deliver real ROI and
-design the technical plans to bring them to life.
+                    don't know where to start. We uncover the opportunities that deliver real ROI and
+                    design the technical plans to bring them to life.
                 </p>
                 <button class="btn-cyan text-base font-bold px-10 py-4 rounded-md shadow-[0_0_20px_rgba(0,194,255,0.3)] hover:shadow-[0_0_40px_rgba(0,194,255,0.6)] transition-all duration-300 transform hover:-translate-y-1" ng-click="openModal('modal_developerlogin')">Get started</button>
             </div>
@@ -55,8 +55,8 @@ design the technical plans to bring them to life.
                 <h2 class="text-3xl md:text-5xl font-bold mb-6">Flexible Strategic Expertise</h2>
                 <p class="text-gray-400 text-lg mb-16 max-w-3xl mx-auto font-light">
                     Connect with our strategists via text, voice, or video. <br>
-Subscribe to a monthly plan to ensure you always have expert advice on
-standby.
+                    Subscribe to a monthly plan to ensure you always have expert advice on
+                    standby.
                 </p>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
@@ -66,9 +66,9 @@ standby.
                         <div class="text-3xl font-bold mb-6">$100 <span class="text-sm font-normal text-gray-500">/ mo</span></div>
                         <p class="text-gray-400 text-sm mb-8 min-h-[80px] flex-grow">
                             Ideal for a monthly strategy
-check-in, quick idea validation,
-or maintaining a direct line to
-an expert for ad-hoc questions.
+                            check-in, quick idea validation,
+                            or maintaining a direct line to
+                            an expert for ad-hoc questions.
                         </p>
                         <button class="btn-cyan w-full py-3 rounded-lg font-bold shadow-lg hover:shadow-cyan-500/40 transition-all duration-300" ng-click="openModal('modal_developerlogin')">Select Plan</button>
                     </div>
@@ -80,10 +80,10 @@ an expert for ad-hoc questions.
                         <div class="text-3xl font-bold mb-6 text-cyan-400">$900 <span class="text-sm font-normal text-gray-500 text-white">/ mo</span></div>
                         <p class="text-gray-300 text-sm mb-8 min-h-[80px] flex-grow">
                             Ideal for active project
-oversight, deep-dive workflow
-analysis, vendor selection, or
-guiding your team through
-implementation.
+                            oversight, deep-dive workflow
+                            analysis, vendor selection, or
+                            guiding your team through
+                            implementation.
                         </p>
                         <button class="btn-cyan w-full py-3 rounded-lg font-bold shadow-lg hover:shadow-cyan-500/40 transition-all duration-300" ng-click="openModal('modal_developerlogin')">Select Plan</button>
                     </div>
@@ -94,10 +94,10 @@ implementation.
                         <div class="text-3xl font-bold mb-6">$8,000 <span class="text-sm font-normal text-gray-500">/ mo</span></div>
                         <p class="text-gray-400 text-sm mb-8 min-h-[80px] flex-grow">
                             Ideal for acting as your
-fractional leadership team,
-managing long-term strategy,
-and providing high-level
-decision support.
+                            fractional leadership team,
+                            managing long-term strategy,
+                            and providing high-level
+                            decision support.
                         </p>
                         <button class="btn-cyan w-full py-3 rounded-lg font-bold shadow-lg hover:shadow-cyan-500/40 transition-all duration-300" ng-click="openModal('modal_developerlogin')">Select Plan</button>
                     </div>
@@ -140,8 +140,8 @@ decision support.
                         <h3 class="text-2xl font-bold text-cyan-400 mb-4 transition-colors">Don't see what you need?</h3>
                         <p class="text-gray-400 text-sm mb-10 leading-relaxed max-w-md">
                             We engineer specialized Al and automation
-solutions from scratch, adding them directly to
-your library to solve unique challenges.
+                            solutions from scratch, adding them directly to
+                            your library to solve unique challenges.
                         </p>
                         
                         <button class="btn-cyan w-fit px-8 py-3 rounded-md text-sm font-bold text-gray-900 shadow-[0_0_20px_rgba(0,194,255,0.2)] hover:shadow-[0_0_30px_rgba(0,194,255,0.4)] transition-all duration-300 mt-auto" onclick="window.open('https://leverai.dev', '_blank')">Start Building</button>
