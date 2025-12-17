@@ -45,6 +45,9 @@ info "Installing npm dependencies"
 # Optimized npm install (forcing devDependencies for build)
 npm install --include=dev --no-audit --no-fund --quiet
 
+info "Fixing permissions on local binaries"
+chmod +x node_modules/.bin/* || true
+
 info "Building assets (SCSS, Tailwind, JS)"
 npm run build
 
