@@ -1,23 +1,13 @@
 .DS_Store
 
-# Dependencies
-/node_modules/
-/vendor/
-application/third_party/stripe/
-application/third_party/dompdf/
-
-# Cache & Sessions
 application/cache/*
 !application/cache/index.html
-!application/cache/sessions/.gitkeep
 
-# Logs
 application/logs/*
 !application/logs/index.html
 
 !application/*/.htaccess
 
-# Environment-specific config (sensitive data)
 # application/config/database.php
 application/config/stripe.php
 # application/config/routes.php
@@ -33,3 +23,5 @@ user_guide_src/build/*
 user_guide_src/cilexer/build/*
 user_guide_src/cilexer/dist/*
 user_guide_src/cilexer/pycilexer.egg-info/*
+/vendor/
+
