@@ -42,14 +42,11 @@ fi
 
 # Install Node dependencies
 info "Installing npm dependencies"
-# Optimized npm install
-npm install --no-audit --no-fund --quiet
+# Optimized npm install (forcing devDependencies for build)
+npm install --include=dev --no-audit --no-fund --quiet
 
-info "Building assets (SCSS, Tailwind, JS) - Sequentially to save memory"
-# Run build steps one by one instead of concurrently
-npm run build:scss
-npm run build:tailwind
-npm run build:js
+info "Building assets (SCSS, Tailwind, JS)"
+npm run build
 
 # Docker Operations
 if [[ "$PRUNE" -eq 1 ]]; then
