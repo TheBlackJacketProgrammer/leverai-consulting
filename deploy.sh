@@ -64,7 +64,7 @@ if [[ "$NO_BUILD" -eq 1 ]]; then
 else
   info "Rebuilding images and restarting containers"
   # .dockerignore ensures this is fast by excluding node_modules
-  docker compose up -d --build
+  docker compose up -d --build --force-recreate
 fi
 
 info "Restarting containers to pick up new JavaScript bundle"
