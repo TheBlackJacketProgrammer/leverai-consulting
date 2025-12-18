@@ -168,7 +168,7 @@
     <script src="<?php echo base_url('assets/devtools/angularjs/angular.min.js'); ?>"></script>
 
     <!-- Angular JS Scripts Bundle -->
-    <script src="<?php echo base_url('assets/dist/bundle.min.js'); ?>"></script>
+    <script src="<?php echo base_url('assets/dist/bundle.min.js?v=' . time()); ?>"></script>
     
 </body>
 </html>
