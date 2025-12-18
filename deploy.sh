@@ -34,6 +34,7 @@ command -v git >/dev/null 2>&1 || { err "git not found"; exit 1; }
 command -v docker >/dev/null 2>&1 || { err "docker not found"; exit 1; }
 
 
+
 # Install PHP dependencies
 if [[ -f "composer.json" ]] && command -v composer >/dev/null 2>&1; then
     info "Installing PHP dependencies"

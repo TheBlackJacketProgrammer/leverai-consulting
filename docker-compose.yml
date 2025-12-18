@@ -8,7 +8,6 @@ services:
     environment: {}
     volumes:
       - ./:/var/www/html
-      - /var/www/html/assets/dist  # Anonymous volume to exclude dist from host mount
       - /var/www/html/node_modules  # Anonymous volume to exclude node_modules from host mount
     ports:
       - "35688:80"
