@@ -216,10 +216,10 @@
                                 <p class="text-gray-400 text-sm">No Comments Yet</p>
                             </div>
                         </div>
-                        <div class="flex items-center justify-center gap-2 w-full" ng-if="ticketDetails.status == 'Rejected'">
+                        <div class="flex items-center justify-center gap-2 w-full" ng-if="ticketDetails.status == 'Rejected' || ticketDetails.status == 'Closed'">
                             <p class="text-sm text-white">Ticket has been rejected and closed.</p>
                         </div>
-                        <div class="flex items-center gap-2 w-full" ng-if="ticketDetails.status != 'Rejected'">
+                        <div class="flex items-center gap-2 w-full" ng-if="ticketDetails.status != 'Rejected' && ticketDetails.status != 'Closed'">
                         
                             <!-- Input Field -->
                             <textarea ng-model="commentData.text" ng-disabled="sendingComment"
