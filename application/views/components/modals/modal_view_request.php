@@ -109,14 +109,14 @@
                                     <span class="primary font-semibold ml-2">{{ ticketDetails.dedicate_hours }} hrs</span>
                                 </p>
                             </div>
-                            <div class=" w-1/2" ng-if="ticketDetails.status != 'Ongoing'">
-                                <p class="font-medium text-white my-2" ng-if="ticketDetails.status != 'Ongoing'">Dedicated Hrs</p>
-                                <button class="btn-hour" ng-click="btnDedicateHours('add')" ng-if="ticketDetails.status != 'Ongoing'">+</button>
-                                <span class="primary font-semibold mx-2" ng-if="ticketDetails.status != 'Ongoing'">{{ ticketDetails.dedicate_hours }} hrs</span>
-                                <button class="btn-hour" ng-click="btnDedicateHours('subtract')" ng-if="ticketDetails.status != 'Ongoing'">-</button>    
+                            <div class=" w-1/2" ng-if="ticketDetails.status == 'Submitted' || ticketDetails.status == 'Under Review' || ticketDetails.status == 'Awaiting Client' || ticketDetails.status == 'Scheduled'">
+                                <p class="font-medium text-white my-2" ng-if="ticketDetails.status == 'Submitted' || ticketDetails.status == 'Under Review' || ticketDetails.status == 'Awaiting Client' || ticketDetails.status == 'Scheduled'">Dedicated Hrs</p>
+                                <button class="btn-hour" ng-click="btnDedicateHours('add')" ng-if="ticketDetails.status == 'Submitted' || ticketDetails.status == 'Under Review' || ticketDetails.status == 'Awaiting Client' || ticketDetails.status == 'Scheduled'">+</button>
+                                <span class="primary font-semibold mx-2" ng-if="ticketDetails.status == 'Submitted' || ticketDetails.status == 'Under Review' || ticketDetails.status == 'Awaiting Client' || ticketDetails.status == 'Scheduled'">{{ ticketDetails.dedicate_hours }} hrs</span>
+                                <button class="btn-hour" ng-click="btnDedicateHours('subtract')" ng-if="ticketDetails.status == 'Submitted' || ticketDetails.status == 'Under Review' || ticketDetails.status == 'Awaiting Client' || ticketDetails.status == 'Scheduled'">-</button>    
                             </div>
                             <div class="flex flex-row items-end justify-center w-1/2">
-                                <button class="btn-update" ng-click="btnUpdateDedicateHours()" ng-if="ticketDetails.status != 'Ongoing'">Update</button>
+                                <button class="btn-update" ng-click="btnUpdateDedicateHours()" ng-if="ticketDetails.status == 'Submitted' || ticketDetails.status == 'Under Review' || ticketDetails.status == 'Awaiting Client' || ticketDetails.status == 'Scheduled'">Update</button>
                             </div>
                         </div>
                     </div>
@@ -216,8 +216,11 @@
                                 <p class="text-gray-400 text-sm">No Comments Yet</p>
                             </div>
                         </div>
-                        <div class="flex items-center justify-center gap-2 w-full" ng-if="ticketDetails.status == 'Rejected' || ticketDetails.status == 'Closed'">
-                            <p class="text-sm text-white">Ticket has been rejected and closed.</p>
+                        <div class="flex items-center justify-center gap-2 w-full" ng-if="ticketDetails.status == 'Blocked'">
+                            <p class="text-sm text-white">This ticket has been blocked.</p>
+                        </div>
+                        <div class="flex items-center justify-center gap-2 w-full" ng-if="ticketDetails.status == 'Closed'">
+                            <p class="text-sm text-white">This ticket has been closed.</p>
                         </div>
                         <div class="flex items-center gap-2 w-full" ng-if="ticketDetails.status != 'Rejected' && ticketDetails.status != 'Closed'">
                         
