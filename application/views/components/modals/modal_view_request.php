@@ -222,7 +222,7 @@
                         <div class="flex items-center justify-center gap-2 w-full" ng-if="ticketDetails.status == 'Closed'">
                             <p class="text-sm text-white">This ticket has been closed.</p>
                         </div>
-                        <div class="flex items-center gap-2 w-full" ng-if="ticketDetails.status != 'Rejected' && ticketDetails.status != 'Closed'">
+                        <div class="flex items-center gap-2 w-full" ng-if="ticketDetails.status != 'Blocked' && ticketDetails.status != 'Closed'">
                         
                             <!-- Input Field -->
                             <textarea ng-model="commentData.text" ng-disabled="sendingComment"
