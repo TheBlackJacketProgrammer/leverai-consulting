@@ -23,8 +23,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$root=(isset($_SERVER['HTTPS']) ? "https://" : "http://").$_SERVER['HTTP_HOST'];
-$root.= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+// Detect HTTPS properly (including behind proxies/load balancers)
+$is_https = (
+    (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
+    (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
+    (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on') ||
+    (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)
+);
+
+$root = ($is_https ? "https://" : "http://") . $_SERVER['HTTP_HOST'];
+$root .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 
 // Check if running locally (localhost or 127.0.0.1)
 $is_local = ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1' || strpos($_SERVER['HTTP_HOST'], 'localhost') !== false);
@@ -36,9 +44,12 @@ if ($is_local) {
     // For production, force HTTPS for leverai.dev domain
     if ($_SERVER['HTTP_HOST'] === 'www.leverai.dev' || $_SERVER['HTTP_HOST'] === 'leverai.dev') {
         $config['base_url'] = 'https://www.leverai.dev/';
+    } elseif ($_SERVER['HTTP_HOST'] === 'www.leverai.consulting' || $_SERVER['HTTP_HOST'] === 'leverai.consulting') {
+        // Force HTTPS for leverai.consulting domain
+        $config['base_url'] = 'https://leverai.consulting/';
     } else {
         // For other production domains, use detected protocol
-        $config['base_url'] = (isset($_SERVER['HTTPS']) ? "https://" : "http://").$_SERVER['HTTP_HOST'].'/';
+        $config['base_url'] = ($is_https ? "https://" : "http://") . $_SERVER['HTTP_HOST'] . '/';
     }
 }
 
