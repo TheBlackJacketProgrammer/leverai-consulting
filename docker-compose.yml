@@ -5,7 +5,15 @@ services:
     build: .
     container_name: leverai-consulting
     restart: unless-stopped
-    environment: {}
+    environment:
+      # SMTP Configuration
+      SMTP_HOST: smtp.gmail.com
+      SMTP_USER: neomaster667@gmail.com
+      SMTP_PASS: wztehmhufqpsylbc
+      SMTP_PORT: 587
+      SMTP_CRYPTO: tls
+      FROM_EMAIL: neomaster667@gmail.com
+      FROM_NAME: LeverAI
     volumes:
       - ./:/var/www/html
       - /var/www/html/node_modules  # Anonymous volume to exclude node_modules from host mount
