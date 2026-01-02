@@ -37,6 +37,7 @@ $route['api/get_ticket_counts_by_status'] = 'Ctrl_Api/get_ticket_counts_by_statu
 $route['api/get_user_profile'] = 'Ctrl_Api/get_user_profile';
 $route['api/update_user_profile'] = 'Ctrl_Api/update_user_profile';
 
+
 // Stripe API routes
 $route['api/register_and_checkout'] = 'Ctrl_Stripe_Api/register_and_checkout';
 $route['api/stripe_webhook'] = 'Ctrl_Stripe_Api/stripe_webhook';
@@ -58,3 +59,5 @@ $route['test-email'] = 'Ctrl_Main/test_email';
 $route['send-welcome-email'] = 'Ctrl_Main/send_welcome_email';
 $route['send-custom-email'] = 'Ctrl_Main/send_custom_email';
 $route['contact'] = 'Ctrl_Main/contact';
+$route['forgot-password'] = 'Ctrl_Main/forgot_password';
+$route['api/reset_password'] = 'Ctrl_Api/reset_password';

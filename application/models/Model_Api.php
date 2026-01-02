@@ -833,4 +833,25 @@ class Model_Api extends CI_Model
         return $this->db->where('id', $user_id)
                         ->update('users_consulting', $data);
     }
+
+    // insert_user_secret
+    public function insert_user_secret($data)
+    {
+        return $this->db->insert('users_secret_answers', $data);
+    }
+
+    // get_user_secret_answer
+    public function get_user_secret_answer($user_id)
+    {
+        return $this->db->where('user_id', $user_id)
+                        ->get('users_secret_answers')
+                        ->row();
+    }
+
+    // update_user_password
+    public function update_user_password($user_id, $new_password)
+    {
+        return $this->db->where('id', $user_id)
+                        ->update('users_consulting', ['password_hash' => password_hash($new_password, PASSWORD_BCRYPT)]);
+    }
 }   

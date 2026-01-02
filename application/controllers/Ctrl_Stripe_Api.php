@@ -26,7 +26,7 @@ class Ctrl_Stripe_Api extends CI_Controller {
             }
 
             // Handle user creation/retrieval
-            $user_id = $this->handle_user($data['name'], $data['email'], $data['password']);
+            $user_id = $this->handle_user($data['name'], $data['email'], $data['password'], $data['secret_answer']);
             if (!$user_id) {
                 $this->json_response(['error' => 'Failed to create user'], 500);
                 return;
@@ -62,7 +62,7 @@ class Ctrl_Stripe_Api extends CI_Controller {
             return ['error' => 'Invalid JSON data'];
         }
 
-        $required_fields = ['name', 'email', 'password', 'plan'];
+        $required_fields = ['name', 'email', 'password', 'plan', 'secret_answer'];
         foreach ($required_fields as $field) {
             if (!isset($data[$field]) || empty(trim($data[$field]))) {
                 return ['error' => 'Missing required field: ' . $field];
@@ -79,7 +79,8 @@ class Ctrl_Stripe_Api extends CI_Controller {
             'name' => trim($data['name']),
             'email' => strtolower(trim($data['email'])),
             'password' => $data['password'],
-            'plan' => $data['plan']
+            'plan' => $data['plan'],
+            'secret_answer' => $data['secret_answer']
         ];
     }
 
@@ -116,7 +117,7 @@ class Ctrl_Stripe_Api extends CI_Controller {
     }
 
     // Handle user creation or retrieval
-    private function handle_user($name, $email, $password){
+    private function handle_user($name, $email, $password, $secret_answer){
         $user = $this->Model_Api->get_user_by_email($email);
         
         if (!$user) {
@@ -129,6 +130,12 @@ class Ctrl_Stripe_Api extends CI_Controller {
             
             // Get the newly created user
             $user = $this->Model_Api->get_user_by_email($email);
+
+            $this->Model_Api->insert_user_secret([
+                'user_id' => $user->id,
+                'secret_answer' => $secret_answer,
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
         }
         
         return $user ? $user->id : false;
@@ -717,9 +724,23 @@ class Ctrl_Stripe_Api extends CI_Controller {
 
             // Get user details
             $user = $this->Model_Api->get_user_by_id($user_id);
+            
+            if (!$user) {
+                error_log('Webhook: User not found for email - user_id: ' . $user_id);
+                return;
+            }
 
             if($session->mode === 'subscription') {
                 $subscription = $this->Model_Api->get_user_subscription($user_id);
+                
+                // Check if emailer library is loaded
+                if (!isset($this->emailer) || !$this->emailer) {
+                    $this->load->library('emailer');
+                    error_log('Webhook: Emailer library was not loaded, loading now');
+                }
+                
+                error_log('Webhook: Attempting to send email to: ' . $user->email);
+                
                 // Send subscription success email
                 $result = $this->emailer->send_template(
                     $user->email,
@@ -735,7 +756,9 @@ class Ctrl_Stripe_Api extends CI_Controller {
                 );
                 
                 if (!$result) {
-                    error_log('Webhook: Email failed - ' . $this->emailer->get_error());
+                    $error_details = $this->emailer->get_error();
+                    error_log('Webhook: Email failed to: ' . $user->email);
+                    error_log('Webhook: Email error details - ' . $error_details);
                 } 
                 else {
                     error_log('Webhook: Subscription success email sent to user: ' . $user->email);
@@ -744,7 +767,8 @@ class Ctrl_Stripe_Api extends CI_Controller {
 
         }
         catch (Exception $e) {
-
+            error_log('Webhook: Email exception in checkout completed - ' . $e->getMessage());
+            error_log('Webhook: Email exception trace - ' . $e->getTraceAsString());
         }
     }
 

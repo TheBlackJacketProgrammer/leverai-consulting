@@ -108,6 +108,70 @@ class Ctrl_Api extends CI_Controller {
         }
     }
 
+    // Reset
+    public function reset_password()
+    {
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+            
+            // Check if JSON decode was successful
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $this->output->set_output(json_encode(['success' => false, 'message' => 'Invalid JSON data.']));
+                return;
+            }
+            
+            $email = $data['email'] ?? '';
+            $secret_question = $data['secret_question'] ?? '';
+            $secret_answer = $data['secret_answer'] ?? '';
+            $new_password = $data['new_password'] ?? '';
+
+
+            // Validate required fields
+            if (empty($email) || empty($secret_question) || empty($secret_answer) || empty($new_password)) {
+                $this->output->set_output(json_encode(['success' => false, 'message' => 'Email, secret question, secret answer, and new password are required.']));
+                return;
+            }
+
+            // Fetch user by email
+            $user = $this->Model_Api->get_user_by_email($email);
+
+            if (!$user) {
+                $this->output->set_output(json_encode(['success' => false, 'message' => 'Account not found.']));
+                return;
+            }
+
+            // Check if user has password field
+            $user_secret = $this->Model_Api->get_user_secret_answer($user->id);
+            if (!$user_secret) {
+                $this->output->set_output(json_encode(['success' => false, 'message' => 'Incorrect secret question or secret answer.']));
+                return;
+            }
+
+            // Verify secret answer
+            if ($user_secret->secret_answer != $secret_answer) {
+                $this->output->set_output(json_encode(['success' => false, 'message' => 'Incorrect secret answer.']));
+                return;
+            }
+
+            // Update user password
+            $this->Model_Api->update_user_password($user->id, $new_password);
+
+            // Send JSON response
+            $this->output->set_output(json_encode([
+                'success' => true,
+                'message' => 'Password reset successful!',
+            ]));
+
+        } catch (Exception $e) {
+            // Log the error for debugging
+            log_message('error', 'API Login Error: ' . $e->getMessage());
+            
+            $this->output->set_output(json_encode([
+                'error' => 'An error occurred during login. Please try again.'
+            ]));
+        }
+    }
+
     // Get remaining hours
     public function remaining_hours()
     {

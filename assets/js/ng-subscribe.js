@@ -6,7 +6,9 @@ app.controller("ng-subscribe", ['$scope', '$http', function ($scope, $http) {
         email: "",
         password: "",
         confirmPassword: "",
-        subscriptionPlan: ""
+        subscriptionPlan: "",
+        secret_question: "",
+        secret_answer: ""
     };
 
     $scope.init = function() {
@@ -46,6 +48,12 @@ app.controller("ng-subscribe", ['$scope', '$http', function ($scope, $http) {
             return;
         }
 
+        if (!$scope.credentials.secret_question || !$scope.credentials.secret_answer) {
+            toastr.error('Please select a secret question and answer.');
+            $("html").removeClass("loading");
+            return;
+        }
+
         console.log('All validations passed, proceeding with API call');
 
         // Prepare request payload
@@ -53,7 +61,9 @@ app.controller("ng-subscribe", ['$scope', '$http', function ($scope, $http) {
             name: $scope.credentials.fullname,
             email: $scope.credentials.email,
             password: $scope.credentials.password,
-            plan: $scope.credentials.subscriptionPlan
+            plan: $scope.credentials.subscriptionPlan,
+            secret_question: $scope.credentials.secret_question,
+            secret_answer: $scope.credentials.secret_answer
         };
 
         // Send data to backend API
@@ -91,5 +101,7 @@ app.controller("ng-subscribe", ['$scope', '$http', function ($scope, $http) {
     };
 
     $scope.init();
+
+
 
 }]);

@@ -457,6 +457,32 @@ app.controller("ng-login", ['$scope', '$http', function ($scope, $http) {
         // Disable page scroll when modal is open
         $('body').addClass('modal-open');
     };
+
+    $scope.resetPassword = function() {
+        console.log('Retrieve Password called');
+        console.log('Credentials:', $scope.credentials);
+
+        if(!$scope.credentials.email || !$scope.credentials.secret_question || !$scope.credentials.secret_answer || !$scope.credentials.new_password) {
+            toastr.error('Please fill out all required fields.');
+            return;
+        }
+
+        $("html").addClass("loading");
+        $http({
+            method: "POST",
+            url: $scope.baseUrl + "api/reset_password",
+            data: $scope.credentials
+        }).then(function successCallback(response) {
+            if(response.data.success) {
+                toastr.success(response.data.message);
+                window.location.href = $scope.baseUrl + "login";
+            }
+            else {
+                toastr.error(response.data.message);
+            }
+            $("html").removeClass("loading");
+        });
+    };
 }]);
 app.controller("ng-subscribe", ['$scope', '$http', function ($scope, $http) {
 
@@ -466,7 +492,9 @@ app.controller("ng-subscribe", ['$scope', '$http', function ($scope, $http) {
         email: "",
         password: "",
         confirmPassword: "",
-        subscriptionPlan: ""
+        subscriptionPlan: "",
+        secret_question: "",
+        secret_answer: ""
     };
 
     $scope.init = function() {
@@ -506,6 +534,12 @@ app.controller("ng-subscribe", ['$scope', '$http', function ($scope, $http) {
             return;
         }
 
+        if (!$scope.credentials.secret_question || !$scope.credentials.secret_answer) {
+            toastr.error('Please select a secret question and answer.');
+            $("html").removeClass("loading");
+            return;
+        }
+
         console.log('All validations passed, proceeding with API call');
 
         // Prepare request payload
@@ -513,7 +547,9 @@ app.controller("ng-subscribe", ['$scope', '$http', function ($scope, $http) {
             name: $scope.credentials.fullname,
             email: $scope.credentials.email,
             password: $scope.credentials.password,
-            plan: $scope.credentials.subscriptionPlan
+            plan: $scope.credentials.subscriptionPlan,
+            secret_question: $scope.credentials.secret_question,
+            secret_answer: $scope.credentials.secret_answer
         };
 
         // Send data to backend API
@@ -551,6 +587,8 @@ app.controller("ng-subscribe", ['$scope', '$http', function ($scope, $http) {
     };
 
     $scope.init();
+
+
 
 }]);
 

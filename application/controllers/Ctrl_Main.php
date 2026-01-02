@@ -174,5 +174,10 @@ class Ctrl_Main extends CI_Controller {
 		}
 	}
 
+	public function forgot_password()
+	{
+		$this->load->view('pages/page_forgot_password');
+	}
+
 
 }

@@ -46,7 +46,7 @@ main.subscribe {
                 pointer-events: none;
             }
             
-            input {
+            input, select {
                 width: 100%;
                 padding: 15px 15px 15px 50px;
                 background-color: $black;
