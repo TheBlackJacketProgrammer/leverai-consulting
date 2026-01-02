@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lever A.I. Development - Automate Your Business</title>
+    <title>Lever A.I. Consulting - Automate Your Business</title>
 
     <!-- Favicon -->
     <link rel="apple-touch-icon" href="<?php echo base_url('assets/img/logo-mini.png'); ?>" type="image/x-icon" />
@@ -152,7 +152,7 @@
     </main>
 
     <footer class="w-full text-center pb-10 pt-6 border-t border-white/5 mt-12">
-        <p class="text-white text-sm tracking-wide mx-auto">&copy; 2025 LEVER LLC. All rights reserved Privacy Policy.</p>
+        <p class="text-white text-sm tracking-wide mx-auto">&copy; <?php echo date("Y"); ?> LEVER LLC. All rights reserved Privacy Policy.</p>
     </footer>
 
     <!-- Modals -->
