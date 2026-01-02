@@ -134,12 +134,6 @@
                                             <input type="radio" name="plan" value="pro" ng-model="credentials.subscriptionPlan" class="primary">
                                             <span class="text-white">100 hours per month - $4000.00</span>
                                         </label>
-
-                                        <!-- Daily - TESTING ONLY -->
-                                        <label class="flex items-center my-2">
-                                            <input type="radio" name="plan" value="daily" ng-model="credentials.subscriptionPlan" class="primary">
-                                            <span class="text-white">Daily - $50.00</span>
-                                        </label>
                                     </div>
                                 </div>
                             </div>
