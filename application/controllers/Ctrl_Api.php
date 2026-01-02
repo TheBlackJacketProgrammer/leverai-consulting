@@ -207,7 +207,7 @@ class Ctrl_Api extends CI_Controller {
         $data['request_priority'] = $data['request_priority'] ?? '';
         $data['dedicate_hours'] = $data['dedicate_hours'] ?? '';
         $data['user_id'] = $this->session->userdata('id');
-        $data['status'] = 'Pending';
+        $data['status'] = 'Submitted';
         $data['ticket_id'] = $this->generate_unique_ticket_id();
 
         $new_hours_remaining = $this->session->userdata('hours_remaining') - $data['dedicate_hours'];
