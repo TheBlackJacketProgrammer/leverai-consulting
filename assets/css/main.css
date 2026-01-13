@@ -804,7 +804,7 @@ body h1, body h2, body h3, body h4, body h5, body h6 {
   line-height: 1.2;
   margin: 0;
   color: #ffffff;
-  opacity: 0.8;
+  opacity: 1;
 }
 body h1 {
   font-size: clamp(32px, 5vw, 40px);
