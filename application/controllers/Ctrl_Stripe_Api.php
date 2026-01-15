@@ -177,7 +177,7 @@ class Ctrl_Stripe_Api extends CI_Controller {
             ]);
 
             // Record billing with Stripe session ID
-            $this->record_billing($user_id, $planDetails['amount'], $session->id);
+            $this->record_billing($user_id, $planDetails['amount'], $session->id, $stripe_customer->id);
 
             // Record Subscription
             $this->record_subscription($user_id, $planDetails['plan'], $planDetails['hours']);
@@ -230,8 +230,8 @@ class Ctrl_Stripe_Api extends CI_Controller {
     }
 
     // Record billing information
-    private function record_billing($user_id, $amount, $stripe_session_id){
-        $this->Model_Api->insert_billing([
+    private function record_billing($user_id, $amount, $stripe_session_id, $stripe_customer_id = null){
+        $billing_data = [
             'user_id' => $user_id,
             'invoice_number' => $stripe_session_id, // Use session ID as invoice number - more reliable!
             'stripe_session_id' => $stripe_session_id, // Store session ID separately too
@@ -239,7 +239,13 @@ class Ctrl_Stripe_Api extends CI_Controller {
             'status' => 'pending',
             'billing_type' => 'new subscription', // New subscription
             'created_at' => date('Y-m-d H:i:s')
-        ]);
+        ];
+
+        if (!empty($stripe_customer_id)) {
+            $billing_data['stripe_customer_id'] = $stripe_customer_id;
+        }
+
+        $this->Model_Api->insert_billing($billing_data);
     }
 
     // Record subscription information
@@ -600,27 +606,39 @@ class Ctrl_Stripe_Api extends CI_Controller {
 
         $stripe_payment_intent_id = $payment_intent->id;
         $customer_id = $payment_intent->customer;
+        $metadata = $payment_intent->metadata ?? null;
 
         $billing_record = $this->Model_Api->get_billing_by_stripe_customer_id($customer_id);
         if ($billing_record) {
             if($billing_record->billing_type === 'topup') {
-                $update_data = [
-                    'status' => 'paid',
-                    'paid_at' => date('Y-m-d H:i:s'),
-                    'invoice_number' => $payment_intent->number,
-                    'stripe_payment_intent_id' => $stripe_payment_intent_id
-                ];
-                $this->Model_Api->update_billing_by_id($billing_record->id, $update_data);
+                if ($billing_record->status !== 'paid') {
+                    $hours = 0;
+                    if ($metadata && isset($metadata->hours)) {
+                        $hours = (int)$metadata->hours;
+                    }
+                    if ($hours <= 0) {
+                        $hours = (int) round(((int)$payment_intent->amount) / 5000);
+                    }
 
-                $user_id = $billing_record->user_id;
-                $hours = $payment_intent->amount / 5000;
-                $this->add_hours_to_user($user_id, $hours);
+                    $update_data = [
+                        'status' => 'paid',
+                        'paid_at' => date('Y-m-d H:i:s'),
+                        'invoice_number' => $stripe_payment_intent_id,
+                        'stripe_payment_intent_id' => $stripe_payment_intent_id
+                    ];
+                    $this->Model_Api->update_billing_by_id($billing_record->id, $update_data);
+
+                    $user_id = $billing_record->user_id;
+                    if ($hours > 0) {
+                        $this->add_hours_to_user($user_id, $hours);
+                    }
+                }
             }
         }
         else {
-            error_log('Webhook: No billing record found for user: ' . $user_id);
-            $data['function_name'] = 'payment_intent.succeeded - No billing record found for user';
-            $data['details'] = json_encode(['user_id' => $user_id, 'stripe_payment_intent_id' => $stripe_payment_intent_id]);
+            error_log('Webhook: No billing record found for customer: ' . $customer_id);
+            $data['function_name'] = 'payment_intent.succeeded - No billing record found for customer';
+            $data['details'] = json_encode(['customer_id' => $customer_id, 'stripe_payment_intent_id' => $stripe_payment_intent_id]);
             $this->Model_Main->stripe_logger($data);
         }
     }
@@ -716,6 +734,52 @@ class Ctrl_Stripe_Api extends CI_Controller {
         $data['function_name'] = 'checkout.session.completed';
         $data['details'] = json_encode($session);
         $this->Model_Main->stripe_logger($data);
+
+        try {
+            $session_id = $session->id ?? null;
+            $stripe_customer_id = $session->customer ?? null;
+            $stripe_subscription_id = $session->subscription ?? null;
+            $payment_status = $session->payment_status ?? null;
+            $checkout_status = $session->status ?? null;
+
+            if (!empty($session_id)) {
+                $billing_record = $this->Model_Api->get_billing_by_session_id($session_id);
+
+                if ($billing_record) {
+                    $update_data = [];
+                    $was_paid = ($billing_record->status === 'paid');
+
+                    if (!empty($stripe_customer_id)) {
+                        $update_data['stripe_customer_id'] = $stripe_customer_id;
+                    }
+
+                    if (!empty($stripe_subscription_id)) {
+                        $update_data['stripe_subscription_id'] = $stripe_subscription_id;
+                    }
+
+                    if (in_array($payment_status, ['paid', 'no_payment_required'], true) || $checkout_status === 'complete') {
+                        $update_data['status'] = 'paid';
+                        $update_data['paid_at'] = date('Y-m-d H:i:s');
+                    }
+
+                    if (!empty($update_data)) {
+                        $this->Model_Api->update_billing_by_id($billing_record->id, $update_data);
+                    }
+
+                    if (!$was_paid && ($update_data['status'] ?? null) === 'paid' && $billing_record->billing_type === 'topup') {
+                        $hours = 0;
+                        if (isset($session->metadata) && isset($session->metadata->hours)) {
+                            $hours = (int)$session->metadata->hours;
+                        }
+                        if ($hours > 0) {
+                            $this->add_hours_to_user($billing_record->user_id, $hours);
+                        }
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            error_log('Webhook: Error updating billing from checkout session - ' . $e->getMessage());
+        }
 
         // Send Email
         try {
@@ -1094,11 +1158,16 @@ class Ctrl_Stripe_Api extends CI_Controller {
                     ],
                     'quantity' => $hours,
                 ]],
-                'success_url' => base_url('payment/top-up-success'),
+                'success_url' => base_url('payment/top-up-success?session_id={CHECKOUT_SESSION_ID}'),
                 'cancel_url' => base_url('payment/cancel'),
                 'customer' => $stripe_customer->id, // Use customer instead of customer_email (same as subscriptions)
                 'payment_intent_data' => [
-                    'description' => 'Top up creation'
+                    'description' => 'Top up creation',
+                    'metadata' => [
+                        'user_id' => $user_id_string,
+                        'hours' => (string)$hours,
+                        'type' => 'topup'
+                    ]
                 ],
                 'metadata' => [
                     'user_id' => $user_id_string,

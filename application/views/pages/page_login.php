@@ -75,7 +75,7 @@
                                         <div class="divider"></div>
                                     </div> -->
                                 </div>
-                                <!-- <span class="text-white">Don't have an account? <a ng-click="openModal('modal_developerlogin')" class="ml-2 primary">Subscribe Now</a></span> -->
+                                <!-- <span class="text-white">Don't have an account? <a href="<?php echo base_url(); ?>subscribe" class="ml-2 primary">Subscribe Now</a></span> -->
                                 <span class="text-white">Forgot Password? <a href="<?php echo base_url('forgot-password'); ?>" class="ml-2 primary">Reset Password</a></span>
                             </div>
                         </div>

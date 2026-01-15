@@ -58,22 +58,23 @@ class Ctrl_Api extends CI_Controller {
             // Check if the new subscription is pending
             $latest_billing = $this->Model_Api->get_latest_billing_by_user_id($user->id);
             if ($latest_billing && $latest_billing->status == 'pending' && $latest_billing->billing_type == 'new subscription') {
-                // Proceed to Stripe payment
-                $checkout_url = $this->get_stripe_checkout_url($latest_billing);
-                if ($checkout_url) {
-                    $this->output->set_output(json_encode([
-                        'success' => false, 
-                        'message' => 'Subscription is pending. Please complete payment.',
-                        'checkout_url' => $checkout_url,
-                        'requires_payment' => true
-                    ]));
-                } else {
-                    $this->output->set_output(json_encode([
-                        'success' => false, 
-                        'message' => 'Subscription is pending but payment session could not be retrieved. Please contact support.'
-                    ]));
+                if (!$this->resolve_pending_billing_if_paid($latest_billing)) {
+                    $checkout_url = $this->get_stripe_checkout_url($latest_billing);
+                    if ($checkout_url) {
+                        $this->output->set_output(json_encode([
+                            'success' => false, 
+                            'message' => 'Subscription is pending. Please complete payment.',
+                            'checkout_url' => $checkout_url,
+                            'requires_payment' => true
+                        ]));
+                    } else {
+                        $this->output->set_output(json_encode([
+                            'success' => false, 
+                            'message' => 'Subscription is pending but payment session could not be retrieved. Please contact support.'
+                        ]));
+                    }
+                    return;
                 }
-                return;
             }
 
             // Get user's subscription to retrieve remaining hours
@@ -517,6 +518,145 @@ class Ctrl_Api extends CI_Controller {
         }
     }
 
+    private function resolve_pending_billing_if_paid($billing)
+    {
+        try {
+            require_once(APPPATH . 'third_party/stripe/init.php');
+            $primary_key = $this->config->item('stripe_secret_key');
+            if (empty($primary_key)) {
+                log_message('error', 'Stripe secret key not configured');
+                return false;
+            }
+
+            \Stripe\Stripe::setApiKey($primary_key);
+
+            if (!empty($billing->stripe_session_id)) {
+                $session_id = $billing->stripe_session_id;
+                try {
+                    $session = \Stripe\Checkout\Session::retrieve($session_id);
+                    $payment_status = $session->payment_status ?? null;
+                    $checkout_status = $session->status ?? null;
+
+                    if (in_array($payment_status, ['paid', 'no_payment_required'], true) || $checkout_status === 'complete') {
+                        $update_data = [
+                            'status' => 'paid',
+                            'paid_at' => date('Y-m-d H:i:s')
+                        ];
+
+                        if (!empty($session->customer)) {
+                            $update_data['stripe_customer_id'] = $session->customer;
+                        }
+
+                        if (!empty($session->subscription)) {
+                            $update_data['stripe_subscription_id'] = $session->subscription;
+                        }
+
+                        $this->Model_Api->update_billing_by_id($billing->id, $update_data);
+                        return true;
+                    }
+                } catch (Exception $e) {
+                    $is_live_session = strpos($session_id, 'cs_live_') === 0;
+                    $is_test_session = strpos($session_id, 'cs_test_') === 0;
+                    $alt_key = null;
+
+                    if ($is_live_session && strpos($primary_key, 'sk_test_') === 0) {
+                        $alt_key = $this->config->item('stripe_secret_key_live');
+                    } elseif ($is_test_session && strpos($primary_key, 'sk_live_') === 0) {
+                        $alt_key = $this->config->item('stripe_secret_key_test');
+                    }
+
+                    if (!empty($alt_key)) {
+                        try {
+                            \Stripe\Stripe::setApiKey($alt_key);
+                            $session = \Stripe\Checkout\Session::retrieve($session_id);
+                            $payment_status = $session->payment_status ?? null;
+                            $checkout_status = $session->status ?? null;
+
+                            if (in_array($payment_status, ['paid', 'no_payment_required'], true) || $checkout_status === 'complete') {
+                                $update_data = [
+                                    'status' => 'paid',
+                                    'paid_at' => date('Y-m-d H:i:s')
+                                ];
+
+                                if (!empty($session->customer)) {
+                                    $update_data['stripe_customer_id'] = $session->customer;
+                                }
+
+                                if (!empty($session->subscription)) {
+                                    $update_data['stripe_subscription_id'] = $session->subscription;
+                                }
+
+                                $this->Model_Api->update_billing_by_id($billing->id, $update_data);
+                                return true;
+                            }
+                        } catch (Exception $e2) {
+                        } finally {
+                            \Stripe\Stripe::setApiKey($primary_key);
+                        }
+                    }
+                }
+            }
+
+            if (!empty($billing->stripe_subscription_id)) {
+                $subscription_id = $billing->stripe_subscription_id;
+                try {
+                    $subscription = \Stripe\Subscription::retrieve($subscription_id);
+                    $status = $subscription->status ?? null;
+
+                    if (in_array($status, ['active', 'trialing'], true)) {
+                        $update_data = [
+                            'status' => 'paid',
+                            'paid_at' => date('Y-m-d H:i:s')
+                        ];
+
+                        if (!empty($subscription->customer)) {
+                            $update_data['stripe_customer_id'] = $subscription->customer;
+                        }
+
+                        $this->Model_Api->update_billing_by_id($billing->id, $update_data);
+                        return true;
+                    }
+                } catch (Exception $e) {
+                    $test_key = $this->config->item('stripe_secret_key_test');
+                    $live_key = $this->config->item('stripe_secret_key_live');
+                    $alt_key = null;
+
+                    if (!empty($test_key) && !empty($live_key) && $test_key !== $live_key) {
+                        $alt_key = ($primary_key === $test_key) ? $live_key : $test_key;
+                    }
+
+                    if (!empty($alt_key)) {
+                        try {
+                            \Stripe\Stripe::setApiKey($alt_key);
+                            $subscription = \Stripe\Subscription::retrieve($subscription_id);
+                            $status = $subscription->status ?? null;
+
+                            if (in_array($status, ['active', 'trialing'], true)) {
+                                $update_data = [
+                                    'status' => 'paid',
+                                    'paid_at' => date('Y-m-d H:i:s')
+                                ];
+
+                                if (!empty($subscription->customer)) {
+                                    $update_data['stripe_customer_id'] = $subscription->customer;
+                                }
+
+                                $this->Model_Api->update_billing_by_id($billing->id, $update_data);
+                                return true;
+                            }
+                        } catch (Exception $e2) {
+                        } finally {
+                            \Stripe\Stripe::setApiKey($primary_key);
+                        }
+                    }
+                }
+            }
+        } catch (Exception $e) {
+        }
+
+        return false;
+    }
+
     // Get Stripe checkout URL from billing record
     private function get_stripe_checkout_url($billing)
     {
@@ -528,10 +668,37 @@ class Ctrl_Api extends CI_Controller {
 
             // Load Stripe library
             require_once(APPPATH . 'third_party/stripe/init.php');
-            \Stripe\Stripe::setApiKey($this->config->item('stripe_secret_key'));
+            $primary_key = $this->config->item('stripe_secret_key');
+            if (empty($primary_key)) {
+                log_message('error', 'Stripe secret key not configured');
+                return false;
+            }
+
+            \Stripe\Stripe::setApiKey($primary_key);
+            $session_id = $billing->stripe_session_id;
 
             // Retrieve the Stripe Checkout Session
-            $session = \Stripe\Checkout\Session::retrieve($billing->stripe_session_id);
+            try {
+                $session = \Stripe\Checkout\Session::retrieve($session_id);
+            } catch (Exception $e) {
+                $is_live_session = strpos($session_id, 'cs_live_') === 0;
+                $is_test_session = strpos($session_id, 'cs_test_') === 0;
+                $alt_key = null;
+
+                if ($is_live_session && strpos($primary_key, 'sk_test_') === 0) {
+                    $alt_key = $this->config->item('stripe_secret_key_live');
+                } elseif ($is_test_session && strpos($primary_key, 'sk_live_') === 0) {
+                    $alt_key = $this->config->item('stripe_secret_key_test');
+                }
+
+                if (!empty($alt_key)) {
+                    \Stripe\Stripe::setApiKey($alt_key);
+                    $session = \Stripe\Checkout\Session::retrieve($session_id);
+                    \Stripe\Stripe::setApiKey($primary_key);
+                } else {
+                    throw $e;
+                }
+            }
 
             // Check if session exists and is still valid
             if ($session && $session->url) {

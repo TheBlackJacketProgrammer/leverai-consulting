@@ -40,7 +40,7 @@
                 <p class="text-white text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-light" style="max-width: 53rem;">
                     You know AI can grow your business and automation can cut costs, but don’t know where to start. Get <strong>direct access</strong> to our expert strategists via text, voice, or video to avoid bad investments and build the right solutions.
                 </p>
-                <button class="btn-cyan text-base font-bold px-10 py-4 rounded-md shadow-[0_0_20px_rgba(0,194,255,0.3)] hover:shadow-[0_0_40px_rgba(0,194,255,0.6)] transition-all duration-300 transform hover:-translate-y-1" ng-click="openModal('modal_developerlogin')">Get started</button>
+                <a href="<?php echo base_url(); ?>subscribe" class="btn-cyan text-base font-bold px-10 py-4 rounded-md shadow-[0_0_20px_rgba(0,194,255,0.3)] hover:shadow-[0_0_40px_rgba(0,194,255,0.6)] transition-all duration-300 transform hover:-translate-y-1 inline-block">Get started</a>
             </div>
         </section>
 
@@ -107,7 +107,7 @@
                             <strong>Maintain Alignment.</strong><br>
                             One bad tool purchase costs more than a year of this plan. Get monthly validation on AI investments, vendor claims, and technical decisions before they become expensive mistakes.
                         </p>
-                        <button class="btn-cyan w-full py-3 rounded-lg font-bold shadow-lg hover:shadow-cyan-500/40 transition-all duration-300" ng-click="openModal('modal_developerlogin')">Select Plan</button>
+                        <a href="<?php echo base_url(); ?>subscribe" class="btn-cyan w-full py-3 rounded-lg font-bold shadow-lg hover:shadow-cyan-500/40 transition-all duration-300 block text-center">Select Plan</a>
                     </div>
 
                     <!-- Plan 2 (Popular) -->
@@ -119,7 +119,7 @@
                             <strong>Active Implementation</strong><br>
                             Ship automation faster with expert oversight. We give you build-ready PDRs, validate technical approaches, and keep your projects moving. Prevent expensive detours while your competitors are still scheduling discovery calls.
                         </p>
-                        <button class="btn-cyan w-full py-3 rounded-lg font-bold shadow-lg hover:shadow-cyan-500/40 transition-all duration-300" ng-click="openModal('modal_developerlogin')">Select Plan</button>
+                        <a href="<?php echo base_url(); ?>subscribe" class="btn-cyan w-full py-3 rounded-lg font-bold shadow-lg hover:shadow-cyan-500/40 transition-all duration-300 block text-center">Select Plan</a>
                     </div>
 
                     <!-- Plan 3 -->
@@ -130,7 +130,7 @@
                             <strong>Fractional Leadership.</strong><br>
                             Get executive-level technical guidance for a fraction of a full-time CTO salary ($200K+). We manage long-term strategy, prevent technical debt, and ensure every dollar of your AI budget drives measurable ROI.
                         </p>
-                        <button class="btn-cyan w-full py-3 rounded-lg font-bold shadow-lg hover:shadow-cyan-500/40 transition-all duration-300" ng-click="openModal('modal_developerlogin')">Select Plan</button>
+                        <a href="<?php echo base_url(); ?>subscribe" class="btn-cyan w-full py-3 rounded-lg font-bold shadow-lg hover:shadow-cyan-500/40 transition-all duration-300 block text-center">Select Plan</a>
                     </div>
                 </div>
 

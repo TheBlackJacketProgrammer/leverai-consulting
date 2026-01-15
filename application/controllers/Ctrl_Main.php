@@ -64,6 +64,7 @@ class Ctrl_Main extends CI_Controller {
 	// For Top Up Payment - Success page
 	public function top_up_payment_success()
 	{
+		$this->sync_topup_from_stripe();
 		$this->load->view('pages/page_top_up_payment_success');
 	}
  
@@ -179,5 +180,123 @@ class Ctrl_Main extends CI_Controller {
 		$this->load->view('pages/page_forgot_password');
 	}
 
+	private function sync_topup_from_stripe()
+	{
+		try {
+			if (!$this->session->userdata('is_logged_in')) {
+				return;
+			}
+
+			$user_id = $this->session->userdata('id');
+			if (!$user_id) {
+				return;
+			}
+
+			$session_id = $this->input->get('session_id');
+			$billing = null;
+
+			if ($session_id) {
+				$billing = $this->Model_Api->get_billing_by_session_id($session_id);
+			}
+
+			if (!$billing) {
+				$billing = $this->Model_Api->get_latest_topup_billing_by_user_id($user_id);
+				if ($billing) {
+					$session_id = $billing->stripe_session_id;
+				}
+			}
+
+			if (!$billing || $billing->billing_type !== 'topup' || empty($session_id)) {
+				return;
+			}
+
+			if ($billing->status === 'paid') {
+				$hours_remaining = $this->Model_Api->get_remaining_hours($user_id);
+				$this->session->set_userdata('hours_remaining', $hours_remaining);
+				return;
+			}
+
+			require_once(APPPATH . 'third_party/stripe/init.php');
+			$primary_key = $this->config->item('stripe_secret_key');
+			if (empty($primary_key)) {
+				return;
+			}
+
+			\Stripe\Stripe::setApiKey($primary_key);
+
+			$stripe_session = null;
+			try {
+				$stripe_session = \Stripe\Checkout\Session::retrieve($session_id);
+			} catch (Exception $e) {
+				$is_live_session = strpos($session_id, 'cs_live_') === 0;
+				$is_test_session = strpos($session_id, 'cs_test_') === 0;
+				$alt_key = null;
+
+				if ($is_live_session && strpos($primary_key, 'sk_test_') === 0) {
+					$alt_key = $this->config->item('stripe_secret_key_live');
+				} elseif ($is_test_session && strpos($primary_key, 'sk_live_') === 0) {
+					$alt_key = $this->config->item('stripe_secret_key_test');
+				}
+
+				if (!empty($alt_key)) {
+					\Stripe\Stripe::setApiKey($alt_key);
+					$stripe_session = \Stripe\Checkout\Session::retrieve($session_id);
+					\Stripe\Stripe::setApiKey($primary_key);
+				} else {
+					throw $e;
+				}
+			}
+
+			if (!$stripe_session) {
+				return;
+			}
+
+			$payment_status = $stripe_session->payment_status ?? null;
+			$checkout_status = $stripe_session->status ?? null;
+
+			if (!(in_array($payment_status, ['paid', 'no_payment_required'], true) || $checkout_status === 'complete')) {
+				return;
+			}
+
+			$hours = 0;
+			if (isset($stripe_session->metadata) && isset($stripe_session->metadata->hours)) {
+				$hours = (int)$stripe_session->metadata->hours;
+			}
+
+			if ($hours <= 0) {
+				return;
+			}
+
+			$subscription = $this->Model_Api->get_user_subscription($user_id);
+			if (!$subscription) {
+				return;
+			}
+
+			$new_hours_remaining = (int)$subscription->hours_remaining + $hours;
+			$updated = $this->Model_Api->update_subscription_hours($subscription->id, $new_hours_remaining);
+			if (!$updated) {
+				return;
+			}
+
+			$update_data = [
+				'status' => 'paid',
+				'paid_at' => date('Y-m-d H:i:s')
+			];
+
+			if (!empty($stripe_session->customer)) {
+				$update_data['stripe_customer_id'] = $stripe_session->customer;
+			}
+
+			if (!empty($stripe_session->payment_intent)) {
+				$update_data['stripe_payment_intent_id'] = $stripe_session->payment_intent;
+			}
+
+			$this->Model_Api->update_billing_by_id($billing->id, $update_data);
+
+			$hours_remaining = $this->Model_Api->get_remaining_hours($user_id);
+			$this->session->set_userdata('hours_remaining', $hours_remaining);
+		} catch (Exception $e) {
+		}
+	}
 
 }

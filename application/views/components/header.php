@@ -10,7 +10,7 @@
         </div>
         <nav>
             <a href="<?php echo base_url('login'); ?>" class="login-link text-xs md:text-sm">Login</a>
-            <button class="btn-cyan text-[0.65rem] md:text-sm font-bold px-3 py-1.5 md:px-6 md:py-2.5 rounded-md shadow-[0_0_20px_rgba(0,194,255,0.3)] hover:shadow-[0_0_30px_rgba(0,194,255,0.5)] transition-all duration-300 whitespace-nowrap" ng-click="openModal('modal_developerlogin')">Get started</button>
+            <a href="<?php echo base_url(); ?>subscribe" class="btn-cyan text-[0.65rem] md:text-sm font-bold px-3 py-1.5 md:px-6 md:py-2.5 rounded-md shadow-[0_0_20px_rgba(0,194,255,0.3)] hover:shadow-[0_0_30px_rgba(0,194,255,0.5)] transition-all duration-300 whitespace-nowrap inline-block">Get started</a>
         </nav>
     </header>
 <?php else: ?>
@@ -67,7 +67,7 @@
               <span>Login</span>
             </a>
             <!-- <a class="btn-primary" href="<?php echo base_url('subscribe'); ?>">Subscribe</a> -->
-            <button class="btn-primary" ng-click="openModal('modal_developerlogin')" <?php echo (isset($status) && ($status == 'subscribe' || $status == 'dashboard')) ? 'style="display: none;"' : ''; ?>>Subscribe</button>
+            <a class="btn-primary" href="<?php echo base_url(); ?>subscribe" <?php echo (isset($status) && ($status == 'subscribe' || $status == 'dashboard')) ? 'style="display: none;"' : ''; ?>>Subscribe</a>
 
             <a class="btn-transparent-bg" href="<?php echo base_url('logout'); ?>" <?php echo (isset($status) && $status == 'dashboard') ? '' : 'style="display: none;"'; ?>>
               <img class="mr-2" src="<?php echo base_url('assets/img/icons/login.svg'); ?>" alt="Login Icon">

@@ -525,6 +525,16 @@ class Model_Api extends CI_Model
                         ->row();
     }
 
+    public function get_latest_topup_billing_by_user_id($user_id)
+    {
+        return $this->db->where('user_id', $user_id)
+                        ->where('billing_type', 'topup')
+                        ->order_by('created_at', 'DESC')
+                        ->limit(1)
+                        ->get('billing_consulting')
+                        ->row();
+    }
+
     // get_billing_by_stripe_customer_id
     public function get_billing_by_stripe_customer_id($stripe_customer_id)
     {
