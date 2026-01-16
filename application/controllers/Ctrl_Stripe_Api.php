@@ -93,9 +93,9 @@ class Ctrl_Stripe_Api extends CI_Controller {
         }
 
         $plan_amounts = [
-            'basic' => 50,
-            'standard' => 450,
-            'pro' => 4000,
+            'basic' => 100,
+            'standard' => 900,
+            'pro' => 8000,
             'daily' => 50
         ];
 

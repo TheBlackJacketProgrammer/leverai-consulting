@@ -122,17 +122,17 @@
                                     <div class="mt-4">
                                         <label class="flex items-center my-2">
                                             <input type="radio" name="plan" value="basic" ng-model="credentials.subscriptionPlan" class="primary">
-                                            <span class="text-white">1 hour per month - $50.00</span>
+                                            <span class="text-white">1 hour per month - $100.00</span>
                                         </label>
 
                                         <label class="flex items-center my-2">
                                             <input type="radio" name="plan" value="standard" ng-model="credentials.subscriptionPlan" class="primary">
-                                            <span class="text-white">10 hours per month - $450.00</span>
+                                            <span class="text-white">10 hours per month - $900.00</span>
                                         </label>
 
                                         <label class="flex items-center my-2">
                                             <input type="radio" name="plan" value="pro" ng-model="credentials.subscriptionPlan" class="primary">
-                                            <span class="text-white">100 hours per month - $4000.00</span>
+                                            <span class="text-white">100 hours per month - $8000.00</span>
                                         </label>
                                     </div>
                                 </div>
