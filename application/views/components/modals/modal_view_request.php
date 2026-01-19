@@ -206,7 +206,7 @@
                                     </div>
                                 </div>
                                 <div class="flex flex-col gap-1 w-full">
-                                    <h5 class="primary font-semibold">{{ comment.usertype == 'admin' ? 'Lever A.I Dev Team' : (comment.user_name || 'Customer') }}</h5>
+                                    <h5 class="primary font-semibold">{{ comment.usertype == 'admin' ? 'LEVER AI Dev Team' : (comment.user_name || 'Customer') }}</h5>
                                     <p class="text-sm text-8 text-white">{{ comment.message }}</p>
                                     <p class="dt-tag">{{ comment.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
                                     <p class="dt-error" ng-if="comment.error">Error in sending comment</p>

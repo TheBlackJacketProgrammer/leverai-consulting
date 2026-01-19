@@ -27,7 +27,7 @@
             <div class="top-up-options container">
                 <h6>Indicate Top Up Value</h6>
                 <div class="top-up-choice">
-                    <p>+ 1 hours - $ 50.00</p>
+                    <p>+ 1 hours - $ 100.00</p>
                     <div class="top-up-choice-value">
                         <button class="btn-value" ng-click="btnTopUpHours('add')"><span>+</span></button>
                         <label class="input-value">{{ topUpHours }}</label>

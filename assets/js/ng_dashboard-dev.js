@@ -61,7 +61,7 @@ app.controller("ng-dashboard-dev", ['$scope', '$http', function ($scope, $http) 
 
     // Top Up Test - Variables
     $scope.topUpHours = 0;
-    $scope.topUpPrice = 50;
+    $scope.topUpPrice = 100;
     $scope.topUpTotal = 0;
     $scope.remainingHours = 0;
 

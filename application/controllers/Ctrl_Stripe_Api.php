@@ -96,7 +96,7 @@ class Ctrl_Stripe_Api extends CI_Controller {
             'basic' => 100,
             'standard' => 900,
             'pro' => 8000,
-            'daily' => 50
+            'daily' => 100
         ];
 
         // Hour per month
@@ -617,7 +617,7 @@ class Ctrl_Stripe_Api extends CI_Controller {
                         $hours = (int)$metadata->hours;
                     }
                     if ($hours <= 0) {
-                        $hours = (int) round(((int)$payment_intent->amount) / 5000);
+                        $hours = (int) round(((int)$payment_intent->amount) / 10000);
                     }
 
                     $update_data = [
@@ -1046,7 +1046,7 @@ class Ctrl_Stripe_Api extends CI_Controller {
             
             $hours = $data['hours'] ?? 0;
             $total = $data['total'] ?? 0;
-            $price = 5000;
+            $price = 10000;
 
             // Validate required fields
             if ($hours <= 0 || $total <= 0) {

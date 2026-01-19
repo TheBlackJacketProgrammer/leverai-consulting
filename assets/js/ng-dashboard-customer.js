@@ -2,7 +2,7 @@ app.controller("ng-dashboard-customer", ['$scope', '$http', function ($scope, $h
     $scope.topUpHours = 0;
     $scope.topUpTotal = 0;
     $scope.remainingHours = 0;
-    $scope.topUpPrice = 50;
+    $scope.topUpPrice = 100;
     
     // Pagination
     $scope.currentPage = 1;

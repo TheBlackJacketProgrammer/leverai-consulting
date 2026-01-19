@@ -504,10 +504,10 @@ app.controller("ng-subscribe", ['$scope', '$http', function ($scope, $http) {
 
     // Map plans to backend identifiers
     $scope.plans = {
-        basic: { id: 'price_12345', label: '1 hour per month - $50.00' },
-        standard: { id: 'price_67890', label: '10 hours per month - $400.00' },
-        pro: { id: 'price_98765', label: '100 hours per month - $3000.00' },
-        daily: { id: 'price_123456', label: 'Daily - $50.00' }
+        basic: { id: 'price_12345', label: '1 hour per month - $100.00' },
+        standard: { id: 'price_67890', label: '10 hours per month - $900.00' },
+        pro: { id: 'price_98765', label: '100 hours per month - $8000.00' },
+        daily: { id: 'price_123456', label: 'Daily - $100.00' }
     };
 
     $scope.proceedForPayment = function() {
@@ -655,7 +655,7 @@ app.controller("ng-dashboard-dev", ['$scope', '$http', function ($scope, $http) 
 
     // Top Up Test - Variables
     $scope.topUpHours = 0;
-    $scope.topUpPrice = 50;
+    $scope.topUpPrice = 100;
     $scope.topUpTotal = 0;
     $scope.remainingHours = 0;
 
@@ -737,7 +737,7 @@ app.controller("ng-dashboard-customer", ['$scope', '$http', function ($scope, $h
     $scope.topUpHours = 0;
     $scope.topUpTotal = 0;
     $scope.remainingHours = 0;
-    $scope.topUpPrice = 50;
+    $scope.topUpPrice = 100;
     
     // Pagination
     $scope.currentPage = 1;
