@@ -3,14 +3,26 @@
     <!-- Landing Page Header -->
     <header class="header-landing">
         <div class="logo">
-            <a href="<?php echo base_url(); ?>" class="flex flex-col w-fit group no-underline hover:no-underline active:no-underline focus:no-underline outline-none">
+            <a href="<?php echo base_url('page_home'); ?>" class="flex flex-col w-fit group no-underline hover:no-underline active:no-underline focus:no-underline outline-none">
                 <div class="self-start text-lg md:text-xl font-bold tracking-[0.2em] text-cyan-400 uppercase leading-none group-hover:text-cyan-300 transition-colors whitespace-nowrap">LEVER <span class="font-normal">AI</span></div>
                 <div class="w-full text-[0.5rem] md:text-[0.6rem] tracking-[0.3em] text-white uppercase text-center group-hover:text-gray-200 transition-colors">CONSULTING</div>
             </a>
         </div>
-        <nav>
-            <a href="<?php echo base_url('login'); ?>" class="login-link text-xs md:text-sm">Login</a>
-            <a href="<?php echo base_url(); ?>subscribe" class="btn-cyan text-[0.65rem] md:text-sm font-bold px-3 py-1.5 md:px-6 md:py-2.5 rounded-md shadow-[0_0_20px_rgba(0,194,255,0.3)] hover:shadow-[0_0_30px_rgba(0,194,255,0.5)] transition-all duration-300 whitespace-nowrap inline-block">Get started</a>
+        <?php $active_page = isset($active_page) ? $active_page : ''; ?>
+        <nav class="flex flex-row items-center justify-end gap-3 md:gap-[1.35rem]">
+            <?php
+                $nav_base = 'text-[0.65rem] md:text-sm font-semibold tracking-[0.18em] uppercase no-underline hover:no-underline active:no-underline focus:no-underline outline-none transition-colors';
+                $sep_class = 'text-white/60 text-[0.65rem] md:text-sm select-none';
+                $home_class = $nav_base . ' ' . (($active_page === 'home') ? 'text-cyan-400' : 'text-white hover:text-cyan-300');
+                $faqs_class = $nav_base . ' normal-case ' . (($active_page === 'faqs') ? 'text-cyan-400' : 'text-white hover:text-cyan-300');
+                $login_class = $nav_base . ' text-white hover:text-cyan-300';
+            ?>
+            <a href="<?php echo base_url('page_home'); ?>" class="<?php echo $home_class; ?>">Home</a>
+            <span class="<?php echo $sep_class; ?>">|</span>
+            <a href="<?php echo base_url('page_faqs'); ?>" class="<?php echo $faqs_class; ?>">FAQs</a>
+            <span class="<?php echo $sep_class; ?>">|</span>
+            <a href="<?php echo base_url('login'); ?>" class="<?php echo $login_class; ?>">Login</a>
+            <a href="<?php echo base_url('subscribe'); ?>" class="btn-cyan hidden md:inline-block text-[0.65rem] md:text-sm font-bold px-3 py-1.5 md:px-6 md:py-2.5 rounded-md shadow-[0_0_20px_rgba(0,194,255,0.3)] hover:shadow-[0_0_30px_rgba(0,194,255,0.5)] transition-all duration-300 whitespace-nowrap">Get Started</a>
         </nav>
     </header>
 <?php else: ?>

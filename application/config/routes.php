@@ -8,6 +8,8 @@ $route['translate_uri_dashes'] = FALSE;
 
 // Custom routes to hide controller name
 $route['login'] = 'Ctrl_Main/login';
+$route['page_home'] = 'Ctrl_Main/page_home';
+$route['page_faqs'] = 'Ctrl_Main/page_faqs';
 $route['authenticate'] = 'Ctrl_Api/authenticate';
 $route['logout'] = 'Ctrl_Main/logout';
 $route['subscribe'] = 'Ctrl_Main/subscribe';

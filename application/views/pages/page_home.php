@@ -21,7 +21,7 @@
 </head>
 <body class="home font-inter text-white antialiased selection:bg-cyan-500 selection:text-white" ng-app="leverai-dev" ng-controller="ng-variables">
     <!-- Header -->
-    <?php $this->load->view('components/header', array('status' => 'home')); ?>
+    <?php $this->load->view('components/header', array('status' => 'home', 'active_page' => 'home')); ?>
 
 
     <main>

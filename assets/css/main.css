@@ -887,7 +887,7 @@ header.header-landing nav {
 }
 @media (min-width: 768px) {
   header.header-landing nav {
-    gap: 2rem;
+    gap: 1.35rem;
   }
 }
 header.header-landing nav .login-link {

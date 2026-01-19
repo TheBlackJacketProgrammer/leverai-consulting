@@ -31,6 +31,16 @@ class Ctrl_Main extends CI_Controller {
 			$this->load->view('pages/page_home');
 		}
 	}
+
+	public function page_home()
+	{
+		$this->load->view('pages/page_home');
+	}
+
+	public function page_faqs()
+	{
+		$this->load->view('pages/page_faqs');
+	}
 	
 
 	public function login(){
