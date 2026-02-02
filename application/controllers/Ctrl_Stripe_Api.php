@@ -272,6 +272,47 @@ class Ctrl_Stripe_Api extends CI_Controller {
             ->set_output(json_encode($data));
     }
 
+    private function sanitize_stripe_statement_descriptor($value, $max_length = 22)
+    {
+        if (!is_string($value)) {
+            return '';
+        }
+
+        $value = strtoupper(trim($value));
+        $value = preg_replace('/[^A-Z0-9 \.\-]/', '', $value);
+        $value = preg_replace('/\s+/', ' ', $value);
+        $value = trim($value);
+
+        if ($value === '') {
+            return '';
+        }
+
+        if (!preg_match('/[A-Z]/', $value)) {
+            return '';
+        }
+
+        if (strlen($value) > $max_length) {
+            $value = substr($value, 0, $max_length);
+            $value = rtrim($value);
+        }
+
+        if (strlen($value) < 5) {
+            return '';
+        }
+
+        return $value;
+    }
+
+    private function get_stripe_statement_descriptor()
+    {
+        return $this->sanitize_stripe_statement_descriptor((string)($this->config->item('stripe_statement_descriptor') ?? ''));
+    }
+
+    private function get_stripe_statement_descriptor_suffix()
+    {
+        return $this->sanitize_stripe_statement_descriptor((string)($this->config->item('stripe_statement_descriptor_suffix') ?? ''));
+    }
+
     // sync_payment_status
     // Handle Stripe webhook events
     // Based on official Stripe documentation: https://docs.stripe.com/webhooks?lang=php
@@ -1144,6 +1185,25 @@ class Ctrl_Stripe_Api extends CI_Controller {
             $stripe_customer = $this->get_or_create_stripe_customer($user, $user_id_string);
             
             // Create a payment intent for one-time payment (not subscription)
+            $payment_intent_data = [
+                'description' => 'Top up creation',
+                'metadata' => [
+                    'user_id' => $user_id_string,
+                    'hours' => (string)$hours,
+                    'type' => 'topup'
+                ]
+            ];
+
+            $statement_descriptor = $this->get_stripe_statement_descriptor();
+            if ($statement_descriptor !== '') {
+                $payment_intent_data['statement_descriptor'] = $statement_descriptor;
+            }
+
+            $statement_descriptor_suffix = $this->get_stripe_statement_descriptor_suffix();
+            if ($statement_descriptor_suffix !== '') {
+                $payment_intent_data['statement_descriptor_suffix'] = $statement_descriptor_suffix;
+            }
+
             $session = \Stripe\Checkout\Session::create([
                 'mode' => 'payment', // One-time payment instead of subscription
                 'payment_method_types' => ['card'],
@@ -1161,14 +1221,7 @@ class Ctrl_Stripe_Api extends CI_Controller {
                 'success_url' => base_url('payment/top-up-success?session_id={CHECKOUT_SESSION_ID}'),
                 'cancel_url' => base_url('payment/cancel'),
                 'customer' => $stripe_customer->id, // Use customer instead of customer_email (same as subscriptions)
-                'payment_intent_data' => [
-                    'description' => 'Top up creation',
-                    'metadata' => [
-                        'user_id' => $user_id_string,
-                        'hours' => (string)$hours,
-                        'type' => 'topup'
-                    ]
-                ],
+                'payment_intent_data' => $payment_intent_data,
                 'metadata' => [
                     'user_id' => $user_id_string,
                     'hours' => $hours,

@@ -525,6 +525,17 @@ class Model_Api extends CI_Model
                         ->row();
     }
 
+    public function get_latest_paid_new_subscription_billing_by_user_id($user_id)
+    {
+        return $this->db->where('user_id', $user_id)
+                        ->where('billing_type', 'new subscription')
+                        ->where('status', 'paid')
+                        ->order_by('created_at', 'DESC')
+                        ->limit(1)
+                        ->get('billing_consulting')
+                        ->row();
+    }
+
     public function get_latest_topup_billing_by_user_id($user_id)
     {
         return $this->db->where('user_id', $user_id)

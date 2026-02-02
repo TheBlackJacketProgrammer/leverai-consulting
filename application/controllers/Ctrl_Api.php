@@ -56,8 +56,9 @@ class Ctrl_Api extends CI_Controller {
             // }
 
             // Check if the new subscription is pending
+            $latest_paid_new_subscription = $this->Model_Api->get_latest_paid_new_subscription_billing_by_user_id($user->id);
             $latest_billing = $this->Model_Api->get_latest_billing_by_user_id($user->id);
-            if ($latest_billing && $latest_billing->status == 'pending' && $latest_billing->billing_type == 'new subscription') {
+            if (!$latest_paid_new_subscription && $latest_billing && $latest_billing->status == 'pending' && $latest_billing->billing_type == 'new subscription') {
                 if (!$this->resolve_pending_billing_if_paid($latest_billing)) {
                     $checkout_url = $this->get_stripe_checkout_url($latest_billing);
                     if ($checkout_url) {
@@ -86,8 +87,8 @@ class Ctrl_Api extends CI_Controller {
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'role' => $user->role,
-                'plan' => $subscription->plan_name,
+                'role' => !empty($user->role) ? $user->role : 'customer',
+                'plan' => $subscription ? $subscription->plan_name : null,
                 'hours_remaining' => $hours_remaining,
                 'is_logged_in' => true
             ];

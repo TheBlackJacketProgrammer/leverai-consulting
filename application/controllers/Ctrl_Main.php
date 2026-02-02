@@ -16,6 +16,7 @@ class Ctrl_Main extends CI_Controller {
 			$user_id = $this->session->userdata('id');
 			$hours_remaining = $this->Model_Api->get_remaining_hours($user_id);
 			$this->session->set_userdata('hours_remaining', $hours_remaining);
+			$this->sync_pending_billing_for_logged_in_user();
 			
 			if($this->session->userdata('role') == 'customer'){
 				$this->load->view('pages/page_dashboard-customer');
@@ -60,14 +61,92 @@ class Ctrl_Main extends CI_Controller {
 	// Stripe payment success page
 	public function payment_success()
 	{
-		// Update session with latest hours from database after successful payment
-		if ($this->session->userdata('is_logged_in')) {
-			$this->load->model('Model_Api');
+		$this->load->model('Model_Api');
+
+		$session_id = $this->input->get('session_id');
+		$user_id = null;
+
+		$billing = null;
+		if (!empty($session_id)) {
+			$billing = $this->Model_Api->get_billing_by_session_id($session_id);
+			if (!$billing) {
+				$billing = $this->Model_Api->get_billing_by_invoice_number($session_id);
+			}
+			if ($billing && !empty($billing->user_id)) {
+				$user_id = $billing->user_id;
+			}
+		}
+
+		$stripe_session = null;
+		if (!empty($session_id)) {
+			$stripe_session = $this->retrieve_stripe_checkout_session($session_id);
+			if ($stripe_session && !$user_id && isset($stripe_session->metadata) && isset($stripe_session->metadata->user_id)) {
+				$user_id = (string)$stripe_session->metadata->user_id;
+			}
+		}
+
+		$stripe_payment_confirmed = null;
+		if ($stripe_session) {
+			$payment_status = $stripe_session->payment_status ?? null;
+			$checkout_status = $stripe_session->status ?? null;
+			$stripe_payment_confirmed = (in_array($payment_status, ['paid', 'no_payment_required'], true) || $checkout_status === 'complete');
+		}
+
+		if ($stripe_payment_confirmed === false) {
+			$this->load->view('pages/page_payment_cancel');
+			return;
+		}
+
+		$payment_confirmed = ($stripe_payment_confirmed === true) || ($stripe_payment_confirmed === null && $billing && $billing->status === 'paid');
+
+		if (!$this->session->userdata('is_logged_in') && !empty($user_id) && $payment_confirmed) {
+			$user = $this->Model_Api->get_user_by_id($user_id);
+			if ($user) {
+				if ($billing && $billing->status === 'pending' && $billing->billing_type === 'new subscription' && $stripe_payment_confirmed === true) {
+					$update_data = [
+						'status' => 'paid',
+						'paid_at' => date('Y-m-d H:i:s')
+					];
+
+					if (!empty($stripe_session->customer)) {
+						$update_data['stripe_customer_id'] = $stripe_session->customer;
+					}
+
+					if (!empty($stripe_session->subscription)) {
+						$update_data['stripe_subscription_id'] = $stripe_session->subscription;
+					}
+
+					$this->Model_Api->update_billing_by_id($billing->id, $update_data);
+				}
+
+				$subscription = $this->Model_Api->get_user_subscription($user->id);
+				$hours_remaining = $subscription ? (int)$subscription->hours_remaining : 0;
+
+				$this->session->set_userdata([
+					'id' => $user->id,
+					'name' => $user->name,
+					'email' => $user->email,
+					'role' => !empty($user->role) ? $user->role : 'customer',
+					'plan' => $subscription ? $subscription->plan_name : null,
+					'hours_remaining' => $hours_remaining,
+					'is_logged_in' => true
+				]);
+
+				$hours_remaining = $this->Model_Api->get_remaining_hours($user->id);
+				$this->session->set_userdata('hours_remaining', $hours_remaining);
+				redirect(base_url());
+				return;
+			}
+		}
+
+		if ($this->session->userdata('is_logged_in') && $payment_confirmed) {
 			$user_id = $this->session->userdata('id');
 			$hours_remaining = $this->Model_Api->get_remaining_hours($user_id);
 			$this->session->set_userdata('hours_remaining', $hours_remaining);
+			redirect(base_url());
+			return;
 		}
-		 
+
 		$this->load->view('pages/page_payment_success');
 	}
 
@@ -190,6 +269,80 @@ class Ctrl_Main extends CI_Controller {
 		$this->load->view('pages/page_forgot_password');
 	}
 
+	private function sync_pending_billing_for_logged_in_user()
+	{
+		try {
+			if (!$this->session->userdata('is_logged_in')) {
+				return;
+			}
+
+			$last_sync_at = (int)($this->session->userdata('last_stripe_billing_sync_at') ?? 0);
+			if ($last_sync_at > 0 && (time() - $last_sync_at) < 30) {
+				return;
+			}
+			$this->session->set_userdata('last_stripe_billing_sync_at', time());
+
+			$user_id = $this->session->userdata('id');
+			if (empty($user_id)) {
+				return;
+			}
+
+			$billing = $this->Model_Api->get_user_latest_pending_billing($user_id);
+			if (!$billing || empty($billing->stripe_session_id)) {
+				return;
+			}
+
+			$stripe_session = $this->retrieve_stripe_checkout_session($billing->stripe_session_id);
+			if (!$stripe_session) {
+				return;
+			}
+
+			$payment_status = $stripe_session->payment_status ?? null;
+			$checkout_status = $stripe_session->status ?? null;
+			if (!(in_array($payment_status, ['paid', 'no_payment_required'], true) || $checkout_status === 'complete')) {
+				return;
+			}
+
+			$update_data = [
+				'status' => 'paid',
+				'paid_at' => date('Y-m-d H:i:s')
+			];
+
+			if (!empty($stripe_session->customer)) {
+				$update_data['stripe_customer_id'] = $stripe_session->customer;
+			}
+
+			if (!empty($stripe_session->subscription)) {
+				$update_data['stripe_subscription_id'] = $stripe_session->subscription;
+			}
+
+			if (!empty($stripe_session->payment_intent)) {
+				$update_data['stripe_payment_intent_id'] = $stripe_session->payment_intent;
+			}
+
+			$this->Model_Api->update_billing_by_id($billing->id, $update_data);
+
+			if ($billing->billing_type === 'topup') {
+				$hours = 0;
+				if (isset($stripe_session->metadata) && isset($stripe_session->metadata->hours)) {
+					$hours = (int)$stripe_session->metadata->hours;
+				}
+
+				if ($hours > 0) {
+					$subscription = $this->Model_Api->get_user_subscription($user_id);
+					if ($subscription) {
+						$new_hours_remaining = (int)$subscription->hours_remaining + $hours;
+						$this->Model_Api->update_subscription_hours($subscription->id, $new_hours_remaining);
+					}
+				}
+			}
+
+			$hours_remaining = $this->Model_Api->get_remaining_hours($user_id);
+			$this->session->set_userdata('hours_remaining', $hours_remaining);
+		} catch (Exception $e) {
+		}
+	}
+
 	private function sync_topup_from_stripe()
 	{
 		try {
@@ -234,28 +387,7 @@ class Ctrl_Main extends CI_Controller {
 
 			\Stripe\Stripe::setApiKey($primary_key);
 
-			$stripe_session = null;
-			try {
-				$stripe_session = \Stripe\Checkout\Session::retrieve($session_id);
-			} catch (Exception $e) {
-				$is_live_session = strpos($session_id, 'cs_live_') === 0;
-				$is_test_session = strpos($session_id, 'cs_test_') === 0;
-				$alt_key = null;
-
-				if ($is_live_session && strpos($primary_key, 'sk_test_') === 0) {
-					$alt_key = $this->config->item('stripe_secret_key_live');
-				} elseif ($is_test_session && strpos($primary_key, 'sk_live_') === 0) {
-					$alt_key = $this->config->item('stripe_secret_key_test');
-				}
-
-				if (!empty($alt_key)) {
-					\Stripe\Stripe::setApiKey($alt_key);
-					$stripe_session = \Stripe\Checkout\Session::retrieve($session_id);
-					\Stripe\Stripe::setApiKey($primary_key);
-				} else {
-					throw $e;
-				}
-			}
+			$stripe_session = $this->retrieve_stripe_checkout_session($session_id);
 
 			if (!$stripe_session) {
 				return;
@@ -306,6 +438,44 @@ class Ctrl_Main extends CI_Controller {
 			$hours_remaining = $this->Model_Api->get_remaining_hours($user_id);
 			$this->session->set_userdata('hours_remaining', $hours_remaining);
 		} catch (Exception $e) {
+		}
+	}
+
+	private function retrieve_stripe_checkout_session($session_id)
+	{
+		try {
+			require_once(APPPATH . 'third_party/stripe/init.php');
+			$primary_key = $this->config->item('stripe_secret_key');
+			if (empty($primary_key)) {
+				return null;
+			}
+
+			\Stripe\Stripe::setApiKey($primary_key);
+
+			try {
+				return \Stripe\Checkout\Session::retrieve($session_id);
+			} catch (Exception $e) {
+				$is_live_session = strpos($session_id, 'cs_live_') === 0;
+				$is_test_session = strpos($session_id, 'cs_test_') === 0;
+				$alt_key = null;
+
+				if ($is_live_session && strpos($primary_key, 'sk_test_') === 0) {
+					$alt_key = $this->config->item('stripe_secret_key_live');
+				} elseif ($is_test_session && strpos($primary_key, 'sk_live_') === 0) {
+					$alt_key = $this->config->item('stripe_secret_key_test');
+				}
+
+				if (!empty($alt_key)) {
+					\Stripe\Stripe::setApiKey($alt_key);
+					$session = \Stripe\Checkout\Session::retrieve($session_id);
+					\Stripe\Stripe::setApiKey($primary_key);
+					return $session;
+				}
+
+				return null;
+			}
+		} catch (Exception $e) {
+			return null;
 		}
 	}
 

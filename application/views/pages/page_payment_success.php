@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Payment Successful | Lever A.I. Development</title>
+  <title>Payment Successful | Lever AI Development</title>
 
   <!-- Favicon -->
   <link rel="apple-touch-icon" href="<?php echo base_url('assets/img/logo-mini.png'); ?>" type="image/x-icon" />
@@ -17,7 +17,7 @@
     <div class="text-green-400 text-6xl my-3">✔</div>
     <h1 class="text-white ">Payment Successful!</h1>
     <div class="text-center">
-      <p class="text-white ">Thank you for subscribing to Lever A.I. Development</p>
+      <p class="text-white ">Thank you for subscribing to Lever AI Development</p>
       <p class="text-white ">Your payment has been received successfully.</p>  
     </div>
     <div class="mb-4">
