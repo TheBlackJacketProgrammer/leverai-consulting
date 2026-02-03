@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Payment Cancelled | Lever A.I. Development</title>
+  <title>Payment Cancelled | Lever AI Consulting</title>
 
   <!-- Favicon -->
   <link rel="apple-touch-icon" href="<?php echo base_url('assets/img/logo-mini.png'); ?>" type="image/x-icon" />

@@ -6,7 +6,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title><?php echo isset($title) ? $title : 'Cargomate - Grow your business with us'; ?></title>
+        <title><?php echo isset($title) ? $title : 'LEVER AI Consulting'; ?></title>
 
         <!-- Favicon -->
         <link rel="apple-touch-icon" href="<?php echo base_url('assets/img/logo-mini.png'); ?>" type="image/x-icon" />
